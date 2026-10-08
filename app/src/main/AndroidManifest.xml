@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--    New permissions required to run as foreground service on Android 14.
+            SYSTEM_EXEMPTED is used when the app is on the doze allow list. This is normal
+            and the expected default behaviour. The other two hijack RECORD_AUDIO and CAMERA if they
+            happen to be granted. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+
+    <!-- this foreground service type permission is exclusively used for import and export backup -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+
+    <!-- Tulkki: merged from the former `tulkki` flavour manifest
+         (docs/MIGRATION.md "The flavour collapse" F1). They used to arrive from the `free`
+         distribution flavour's manifest; there is one flavour now, so they live here. -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.BIND_TELECOM_CONNECTION_SERVICE" />
+
+    <queries>
+        <package android:name="org.sufficientlysecure.keychain" />
+        <package android:name="org.torproject.android" />
+
+        <intent>
+            <action android:name="eu.siacs.conversations.location.request" />
+        </intent>
+        <intent>
+            <action android:name="eu.siacs.conversations.location.show" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+        </intent>
+        <intent>
+            <action android:name="org.unifiedpush.android.connector.MESSAGE" />
+        </intent>
+    </queries>
+
+    <application
+        android:name="uk.xa0.tulkki.app.TulkkiApplication"
+        android:allowBackup="false"
+        tools:replace="android:allowBackup"
+        tools:ignore="GoogleAppIndexingWarning"
+        android:appCategory="social"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:localeConfig="@xml/locales_config"
+        android:networkSecurityConfig="@xml/network_security_configuration"
+        android:preserveLegacyExternalStorage="true"
+        android:requestLegacyExternalStorage="true"
+        android:enableOnBackInvokedCallback="true"
+        android:theme="@style/Theme.Tulkki"
+        tools:targetApi="tiramisu">
+
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
+        <!-- The warning that systemExempted requires alarm permission is incorrect because doze white list is sufficient -->
+        <service
+            android:name="uk.xa0.tulkki.xmpp.services.XmppConnectionService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse|systemExempted|microphone|camera|location"
+            tools:ignore="ForegroundServicePermission">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="xmpp-im" />
+        </service>
+
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
+
+        <service
+            android:name="uk.xa0.tulkki.app.services.CallIntegrationConnectionService"
+            android:exported="true"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="uk.xa0.tulkki.app.receiver.SystemEventReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <action android:name="android.media.RINGER_MODE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:enabled="false"
+            android:name="uk.xa0.tulkki.ui.UnifiedPushDistributor"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="link"
+                    android:scheme="unifiedpush" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name="uk.xa0.tulkki.app.receiver.UnifiedPushDistributor"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.distributor.REGISTER" />
+                <action android:name="org.unifiedpush.android.distributor.UNREGISTER" />
+                <action android:name="org.unifiedpush.android.distributor.feature.BYTES_MESSAGE" />
+                <action android:name="org.unifiedpush.android.distributor.feature.MESSENGER" />
+                <action android:name="org.unifiedpush.android.distributor.feature.APP_VALIDATION" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FULLY_REMOVED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="uk.xa0.tulkki.ui.ShareLocationActivity"
+            android:label="@string/title_activity_share_location" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.SearchActivity"
+            android:label="@string/search_messages" />
+
+        <activity
+            android:name="uk.xa0.tulkki.ui.ShowLocationActivity"
+            android:label="@string/title_activity_show_location" />
+        <!-- Tulkki: this is the launcher. The entry point used to be `ConversationActivity`, a
+             trampoline whose only work was to start this activity and finish, so that the launcher
+             could be exported and themed while the list stayed `exported="false"`/`singleTask`; it
+             and its splash theme are gone (docs/MIGRATION.md `ui-13`). Nothing here needs a splash
+             theme: the app theme sets `android:colorBackground` in `values/` and `values-night/`,
+             and Material3 derives `android:windowBackground` from it, so the system's starting
+             window already draws the app's own background. The `android.app.shortcuts` meta-data
+             belongs to the main/launcher activity, so it moves here with the intent filter. -->
+        <activity
+            android:name="uk.xa0.tulkki.ui.ConversationListActivity"
+            android:label="@string/app_name"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:minWidth="300dp"
+            android:minHeight="300dp"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+        <activity
+            android:name="uk.xa0.tulkki.ui.ScanActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Tulkki.FullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.UriHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="xmpp" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="conversations.im" />
+                <data android:pathPrefix="/i/" />
+                <data android:pathPrefix="/j/" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="imto" />
+                <data android:host="jabber" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="imto" />
+                <data android:host="xmpp" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="uk.xa0.tulkki.ui.StartConversationActivity"
+            android:exported="true"
+            android:label="@string/title_activity_new_chat"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="uk.xa0.tulkki.ui.activity.SettingsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.NOTIFICATION_PREFERENCES" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="uk.xa0.tulkki.ui.ChooseContactActivity"
+            android:label="@string/title_activity_choose_contact" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.BlocklistActivity"
+            android:label="@string/title_activity_block_list" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.ChangePasswordActivity"
+            android:label="@string/change_password_on_server" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.ChooseAccountForProfilePictureActivity"
+            android:enabled="false"
+            android:exported="true"
+            android:label="@string/choose_account">
+            <intent-filter android:label="@string/set_profile_picture">
+                <action android:name="android.intent.action.ATTACH_DATA" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="uk.xa0.tulkki.ui.ShareViaAccountActivity"
+            android:label="@string/title_activity_share_via_account"
+            android:launchMode="singleTop" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.EditAccountActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.ConferenceDetailsActivity"
+            android:label="@string/action_muc_details"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.ContactDetailsActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.PublishProfilePictureActivity"
+            android:label="@string/mgmt_account_publish_avatar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.PublishGroupChatProfilePictureActivity"
+            android:label="@string/group_chat_avatar" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.VerifyOTRActivity"
+            android:label="@string/verify_otr"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.ShareWithActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="uk.xa0.tulkki.ui.TrustKeysActivity"
+            android:label="@string/trust_omemo_fingerprints"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.AboutActivity"
+            android:parentActivityName="uk.xa0.tulkki.ui.activity.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uk.xa0.tulkki.ui.activity.SettingsActivity" />
+        </activity>
+        <!--
+          Tulkki: the DeepSeek platform's top-up page in a WebView, opened from Tulkki's settings.
+          Not exported - nothing outside the app has any business opening it, and what it holds is a
+          web session the owner signs into once. It keeps the app's own theme, so its toolbar and
+          status bar are the app's; the page inside is what is darkened.
+        -->
+        <activity
+            android:name="uk.xa0.tulkki.ui.TopUpActivity"
+            android:exported="false"
+            android:label="@string/tulkki_top_up_title"
+            android:parentActivityName="uk.xa0.tulkki.ui.activity.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uk.xa0.tulkki.ui.activity.SettingsActivity" />
+        </activity>
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity android:name="uk.xa0.tulkki.ui.MemorizingActivity" />
+
+        <activity
+            android:name="uk.xa0.tulkki.ui.MediaBrowserActivity"
+            android:label="@string/media_browser" />
+        <activity android:name="uk.xa0.tulkki.ui.AddReactionActivity" />
+
+        <activity android:name="uk.xa0.tulkki.ui.ConversationCalendarActivity"
+            android:label="@string/title_activity_calendar" />
+
+        <activity
+            android:name="uk.xa0.tulkki.ui.imageeditor.ImageEditorActivity"
+            android:theme="@style/Theme.Tulkki.FullScreen"
+            android:configChanges="orientation" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <provider
+            android:name="uk.xa0.tulkki.app.services.BarcodeProvider"
+            android:authorities="${applicationId}.barcodes"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
+        <activity
+            android:name="uk.xa0.tulkki.ui.ShortcutActivity"
+            android:exported="true"
+            android:label="@string/contact">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="uk.xa0.tulkki.ui.MucUsersActivity"
+            android:label="@string/group_chat_members" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.StoriesActivity"
+            android:label="@string/stories" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.StoryViewActivity"
+            android:label="@string/story" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.ChannelDiscoveryActivity"
+            android:label="@string/discover_channels" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.RtpSessionActivity"
+            android:autoRemoveFromRecents="true"
+            android:launchMode="singleInstance"
+            android:supportsPictureInPicture="true" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.ImportBackupActivity"
+            android:exported="true"
+            android:label="@string/restore_backup"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/vnd.conversations.backup" />
+                <data android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/vnd.conversations.backup" />
+                <data android:scheme="file" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="content" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.ceb" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.ceb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.ceb" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="uk.xa0.tulkki.ui.CallsActivity"
+            android:label="@string/calls" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.PostsActivity"
+            android:label="@string/feeds" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.CreatePostActivity"
+            android:label="@string/create_post" />
+
+        <!-- Tulkki: the components the former `tulkki` flavour manifest declared, merged here so
+             src/main is their only definition (docs/MIGRATION.md "The flavour collapse" F1). -->
+        <service
+            android:name="uk.xa0.tulkki.app.extras.UpdateNowPlayingService"
+            android:exported="false"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <service android:name="uk.xa0.tulkki.app.extras.ConnectionService"
+            android:label="Tulkki"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.telecom.ConnectionService" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name="uk.xa0.tulkki.ui.media.MediaViewerActivity"
+            android:autoRemoveFromRecents="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:launchMode="singleInstance"
+            android:supportsPictureInPicture="true"
+            android:exported="false"
+            android:theme="@style/Theme.Tulkki.FullScreen" />
+
+        <activity
+            android:name="uk.xa0.tulkki.ui.ManageAccountActivity"
+            android:label="@string/title_activity_manage_accounts"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.WelcomeActivity"
+            android:label="@string/app_name"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.PickServerActivity"
+            android:label="@string/get_jabber_id"
+            android:exported="false"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="uk.xa0.tulkki.ui.MagicCreateActivity"
+            android:label="@string/get_jabber_id"
+            android:exported="false"
+            android:launchMode="singleTask" />
+    </application>
+</manifest>

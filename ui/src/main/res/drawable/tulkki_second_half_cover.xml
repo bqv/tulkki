@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tulkki: the stand-in for the other side of a received message. The original is a contact's text and
+  is never the owner's to read, so the view holds no text at all - this shape is the whole of it,
+  tinted by the theme and dimmed by the view's own alpha. Deliberately not a blur: a blur needs the
+  text in the view to blur it, and that is exactly the leak docs/MIGRATION.md "The leak surfaces" records (uiautomator reads
+  the original out of a covered bubble's node).
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="6dp" />
+    <solid android:color="#ffffffff" />
+</shape>

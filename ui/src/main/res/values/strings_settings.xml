@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The settings lane's own strings. `res/values/strings.xml` is frozen, so a sentence this lane needs
+  that no other screen has lives here.
+
+  `preference_copied` is the one: the old about row's long press copied its summary with
+  `androidx.preference`'s own confirmation. `android.nonTransitiveRClass=true` makes the library's
+  resource unreachable from `:ui`, so the sentence is carried here word for word - quotes included -
+  because the row must say what it always said.
+-->
+<resources>
+    <string name="preference_copied">\"%1$s\" copied to clipboard.</string>
+</resources>

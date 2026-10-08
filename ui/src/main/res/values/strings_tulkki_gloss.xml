@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The reading aid's own words, kept in a file of their own. The gloss labels - Dictionary form,
+  Ending, Case, Meaning - live in src/main/res/values/strings_tulkki.xml with the rest of Tulkki's
+  copy; this file holds the one line the aid says itself rather than rendering from a field. Android
+  merges every strings file in a values/ directory, so a second file is a merge and not a clash, and
+  nothing here can collide with what another agent is editing.
+-->
+<resources>
+    <!--
+      The line the aid says in place of the Ending and Case rows when the tapped word is already its
+      dictionary form and the model named neither: the absence is the answer, so it is said rather
+      than left as a gap. The owner's wording, exactly - lower case and an em dash, not a hyphen.
+    -->
+    <string name="tulkki_gloss_basic_form">basic form — no ending/case</string>
+</resources>

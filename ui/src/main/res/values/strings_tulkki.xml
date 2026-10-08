@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tulkki's own copy. Kept in its own file so upstream's strings.xml stays untouched and a rebase
+  stays mechanical; every name is prefixed so it cannot collide with upstream's.
+-->
+<resources>
+    <string name="tulkki_settings_title">Tulkki</string>
+    <string name="tulkki_settings_summary">Translation, the DeepSeek key and usage</string>
+    <!-- The same entry with the interpreter off: it is still the way in, and it says what the app is
+         now rather than listing rows that are not behind it. -->
+    <string name="tulkki_settings_summary_off">A plain XMPP client — nothing is translated</string>
+    <!-- The drawer row for the same screen. It is one line at drawer width, so it says what the
+         screen is rather than listing what is on it; the settings list keeps the long summary. -->
+    <string name="tulkki_drawer_summary">Translation</string>
+
+    <!--
+      The conversation-list preview's own line for a received message from a group member the owner
+      muted. The tree hardcoded the English word at that branch; every line the list draws is a string.
+    -->
+    <string name="tulkki_preview_muted">Muted</string>
+
+    <!-- The conversation list itself: its three filters, its four states, and the two marks a row wears. -->
+    <string name="tulkki_list_unread">Unread</string>
+    <string name="tulkki_list_groups">Groups</string>
+    <string name="tulkki_list_muted">Muted</string>
+    <string name="tulkki_list_empty">No conversations yet</string>
+    <string name="tulkki_list_empty_hint">A conversation appears here as soon as there is one.</string>
+    <string name="tulkki_list_connecting">Connecting…</string>
+    <string name="tulkki_list_disconnected">Not connected</string>
+    <!--
+      The conversation view's two non-row states. The loading line is §3.6's top-anchored progress row,
+      and the explainer is §4.6's empty state: "much more informative than 'no messages'", so it says
+      the one thing this app does to a message that is not readable yet.
+    -->
+    <string name="tulkki_chat_loading">Loading history…</string>
+    <string name="tulkki_chat_empty_title">Nothing to read yet</string>
+    <string name="tulkki_chat_empty_hint">Messages appear here. One that still needs translating is drawn as a blurred shimmer until it is ready — tap it to translate that one now.</string>
+    <!--
+      The attachment cell's size line. Four magnitudes rather than a platform formatter: the cell is
+      drawn under the screenshot harness as well, so it owns its own shapes and calls no framework
+      string. The unit is not a word of ours to translate.
+    -->
+    <string name="tulkki_attachment_size_bytes">%1$d B</string>
+    <string name="tulkki_attachment_size_kilo">%1$d kB</string>
+    <string name="tulkki_attachment_size_mega">%1$.1f MB</string>
+    <string name="tulkki_attachment_size_giga">%1$.1f GB</string>
+    <!--
+      The composer's own three: the field's hint, the always-outgoing reply preview's title, and the
+      line that says the queue is working. The chip's own words are not here - they are the language
+      strings in `strings.xml` (`tulkki_pair_they_*` for the visible tiers, the
+      `tulkki_language_chip_content_*` three for the pair as spoken) - and this screen draws the same
+      vocabulary.
+    -->
+    <!--
+      The state sentence a conversation with translation failures says at rest, and the two lines the
+      failures screen draws when it was opened for one conversation: the whole-screen "nothing failed"
+      is not true of a filtered screen whose rows simply are not this conversation's.
+    -->
+    <string name="tulkki_state_failed">Some messages here could not be translated.</string>
+    <string name="tulkki_failures_filtered">Showing one conversation only.</string>
+    <string name="tulkki_failures_none_filtered">Nothing has failed in this conversation.</string>
+
+    <string name="tulkki_chat_hint">Message</string>
+    <string name="tulkki_chat_replying">Replying to</string>
+    <string name="tulkki_chat_translating">Translating…</string>
+    <!--
+      The staged-attachment strip's own two words. The square says what it is to a reader and the
+      corner button says what tapping it does; neither names the file, because a staged attachment
+      has no name to name (a filename is not a message body, and a body must never stand in for it).
+    -->
+    <string name="tulkki_composer_attachment">Attachment to send</string>
+    <string name="tulkki_composer_remove_attachment">Remove attachment</string>
+    <string name="tulkki_composer_cancel_reply">Cancel reply</string>
+    <!--
+      Item 16's per-conversation switch, drawn in the composer's own area because that is where the
+      hold it governs is reported. It is on for a room the owner has never touched: a doubtful
+      translation - one no reader could vouch for, or an answer in the wrong language - is held for
+      the owner's tap rather than sent. It is deliberately not a setting on the settings screen: the
+      exception is per room, and a global switch would leave the bug in every room it was not used on.
+    -->
+    <string name="tulkki_doubt_hold">Hold doubtful translations</string>
+    <!--
+      The same switch's visible word when it is the small chip in the composer's input row rather than
+      the full-width labelled row it replaced (the owner: the label beside a full-size switch was
+      "really in-your-face"). The full sentence above is the chip's accessible name, so the setting is
+      still named for a screen reader; the chip's short word keeps the row quiet.
+    -->
+    <string name="tulkki_doubt_hold_chip">Doubtful</string>
+    <!--
+      The two doubt kinds' own sentences, and the two buttons the composer's bar offers for them
+      (docs/MIGRATION.md item 16). "Tap to send it" was one sentence for both, and it was false for the
+      echo: the answer is the owner's own words, so the tap re-asks rather than sending. The other
+      kind - an answer no reader could vouch for - is a real translation, so its button sends the
+      stored answer as it stands. The action lives on the bar because the bar is always visible and
+      already has a button slot; the bubble's tap is installed per row by a verdict recomputed when
+      the row is bound, so a row whose verdict no longer holds has no listener to tap.
+    -->
+    <string name="tulkki_hold_doubt_echo">Not sent: the translation came back unchanged, so nothing was translated.</string>
+    <string name="tulkki_hold_doubt_send">Send it</string>
+    <!--
+      A send failure - the retry was tried and did not send - offers two actions on the bar: the retry
+      (whose wording is the owner-editable setting below) and this one, the owner's one exception to
+      "nothing is sent untranslated". It is per message, never automatic and never a setting.
+    -->
+    <string name="tulkki_hold_send_as_written">Send as written</string>
+    <!--
+      The held send's retry action is UI copy the owner may rewrite. It is a settings row of its own,
+      down with the sent-side behaviour and never behind the prompts container, because it is not an
+      instruction and enters no prompt cache identity.
+    -->
+    <string name="tulkki_retry_wording">Retry wording</string>
+    <string name="tulkki_retry_wording_summary">The button that asks DeepSeek again says: %1$s</string>
+    <!--
+      A row's language pair, and every surface that names a language names the pair (AGENTS.md): the
+      conversation's own language and the app language. A pair has no direction, so neither does this.
+    -->
+    <string name="tulkki_language_pair">%1$s · %2$s</string>
+
+    <!-- The settings screen's two sections and its catch-all; the rows are uk.xa0.tulkki.ui.settings.SettingsPage's. -->
+    <string name="tulkki_category_received">Received messages</string>
+    <string name="tulkki_category_everything">Everything else</string>
+
+    <!--
+      The received original's own switch, the received-side counterpart of "Show the second half"
+      below. It can only ever remove the strip: off, a received message is the translation alone. It
+      is never a blur control - SecondHalf conceals a contact's original before it reads any setting -
+      so neither summary may suggest that turning it off makes that text readable; the on summary says
+      outright that it is never readable.
+    -->
+    <string name="tulkki_show_concealed_original">Show the concealed original</string>
+    <string name="tulkki_show_concealed_original_on">A contact\'s original is drawn as a blurred strip under the translation. It is never readable.</string>
+    <string name="tulkki_show_concealed_original_off">Each message is the translation alone, with nothing under it.</string>
+    <!-- The global switch above is off, so every message is a single half and this row decides nothing. -->
+    <string name="tulkki_show_concealed_original_second_half_off">Only applies while Show the second half is on.</string>
+
+    <string name="tulkki_app_language">App language</string>
+    <string name="tulkki_app_language_dialog">The language everything is translated into and out of</string>
+    <string name="tulkki_app_language_summary">Received messages become %1$s; what you write is translated from %1$s.</string>
+
+    <!--
+      The study language is the gloss's language, and it is separate from the app language on purpose:
+      the text a gloss explains is already in the app language.
+    -->
+    <string name="tulkki_study_language">Study language</string>
+    <string name="tulkki_study_language_dialog">The language tapped words are explained in</string>
+    <string name="tulkki_study_language_summary">A tapped word is explained in %1$s.</string>
+
+    <!--
+      The interpreter's off state, in the three places the screen says it. The sentinel is the first
+      entry of both language pickers and is the switch's own off position: English is a language that
+      happens to be off, while this says so outright. Neither row may name it through the ordinary
+      language-name path - no detector can name it - so the label and both summaries are strings of
+      their own.
+    -->
+    <string name="tulkki_language_none">None — a plain XMPP client</string>
+    <string name="tulkki_app_language_off_summary">Off: messages are shown exactly as they arrive, and nothing is translated.</string>
+    <string name="tulkki_study_language_off_summary">Off: a tapped word is not explained.</string>
+    <string name="tulkki_interpreter_off_line">The interpreter is off, so Tulkki is a plain XMPP client. Set the app and study languages to anything but English to turn it on.</string>
+    <string name="tulkki_interpreter_off_title">Interpretation is off</string>
+    <string name="tulkki_usage_open_settings">Open Tulkki settings</string>
+
+    <string name="tulkki_reveal_first">Show the translation suggestion first</string>
+    <string name="tulkki_reveal_first_on">The suggestion is shown for you to retype.</string>
+    <string name="tulkki_reveal_first_off">You attempt the translation first, then ask to see the suggestion.</string>
+
+    <!--
+      The two display settings. The conceal setting is worded around the owner's own messages on
+      purpose: a contact's original is concealed whatever these say, and the summaries say so rather
+      than leaving a reader to wonder whether turning it off reveals somebody else's words.
+    -->
+    <string name="tulkki_category_sent">Sent messages</string>
+    <string name="tulkki_show_second_half">Show the second half</string>
+    <string name="tulkki_show_second_half_on">A translated message shows both languages, one under the other.</string>
+    <string name="tulkki_show_second_half_off">Every message is a single half.</string>
+    <string name="tulkki_conceal_own_second_half">Conceal your own second half</string>
+    <string name="tulkki_conceal_own_second_half_on">What you sent is concealed too. A contact\'s original is always concealed, whatever this says.</string>
+    <string name="tulkki_conceal_own_second_half_off">You can read what you sent. A contact\'s original is always concealed, whatever this says.</string>
+
+    <!--
+      The English row on a received bubble: its two settings. "English" here is the hardcoded code
+      en and never the app language - the summaries say "the English" rather than naming a language so
+      they cannot drift into meaning "the app language".
+      The second switch only means anything while the first is on, and the screen greys it and says so
+      when it is not: a row that cannot do anything must not look as if it could.
+    -->
+    <string name="tulkki_show_blurred_english">Show a blurred English translation</string>
+    <string name="tulkki_show_blurred_english_on">A received message also carries the English. It is hidden until you tap it.</string>
+    <string name="tulkki_show_blurred_english_off">Received messages carry no English row.</string>
+    <!-- The app language is already English, so the top half of every bubble is the English this row would add. -->
+    <string name="tulkki_unblur_english_on_tap">Tap to unblur this translation</string>
+    <string name="tulkki_unblur_english_on_tap_on">The English is bought only when you tap it.</string>
+    <string name="tulkki_unblur_english_on_tap_off">The English is bought without waiting for a tap, and stays hidden until you tap it.</string>
+    <!-- The switch above is off, so this one has nothing to decide. -->
+    <string name="tulkki_unblur_english_on_tap_master_off">Only applies while received messages show the English.</string>
+    <!--
+      What a screen reader is told about an English row instead of its text: the string must not be in
+      the view (the blur is a bitmap), and a reader must not be handed it either.
+    -->
+    <string name="tulkki_english_row_hidden">Tap for the English translation</string>
+    <string name="tulkki_english_row_blurred">The English translation, blurred; tap to read it</string>
+    <!--
+      Item 17's decision five: a received message whose translation genuinely failed may offer its own
+      original, blurred and tap-revealed. This is the screen reader's line, never the original's, and it
+      names no language - the deciding fact is the failure, never the language the message is in.
+    -->
+    <string name="tulkki_original_row_blurred">The original, blurred; tap to read it</string>
+
+    <!--
+      The sent half of the same thing: an English retranslation of what went on the wire. Off by
+      default like the received switch, bought by a tap and by nothing else, and not drawn at all in a
+      conversation that already speaks English - the wire is the English there, and "blur sent
+      translations" governs it instead.
+    -->
+    <string name="tulkki_show_english_retranslation">Show a blurred English retranslation</string>
+    <string name="tulkki_show_english_retranslation_on">What you sent also carries the English, unless the conversation is already in English. It is hidden until you tap it.</string>
+    <string name="tulkki_show_english_retranslation_off">Sent messages carry no English row.</string>
+
+    <string name="tulkki_daily_cap">Daily token cap</string>
+    <string name="tulkki_daily_cap_dialog">Tokens per day, 0 for no cap</string>
+    <string name="tulkki_daily_cap_summary">%1$s tokens a day</string>
+    <string name="tulkki_daily_cap_none">No daily cap</string>
+
+    <!--
+      The three prices the Ledger's estimate is computed at. Peak numbers only, because off-peak is a
+      fraction of peak that the page itself states; a blank or unparseable field falls back to the
+      number in force rather than to zero, which would silently claim the app is free. They are edited
+      on the Ledger screen, where the figures they price are on screen beside them - the labels are
+      shared with the row that opens each one.
+    -->
+    <string name="tulkki_price_cache_hit">Peak price: cached input</string>
+    <string name="tulkki_price_cache_hit_dialog">CNY per 1M cached input tokens at peak</string>
+    <string name="tulkki_price_cache_miss">Peak price: uncached input</string>
+    <string name="tulkki_price_cache_miss_dialog">CNY per 1M uncached input tokens at peak</string>
+    <string name="tulkki_price_output">Peak price: output</string>
+    <string name="tulkki_price_output_dialog">CNY per 1M output tokens at peak</string>
+
+    <string name="tulkki_api_key">API key</string>
+    <string name="tulkki_api_key_dialog">DeepSeek API key</string>
+    <string name="tulkki_api_key_stored">Stored in the Keystore-backed store.</string>
+    <string name="tulkki_api_key_missing">No key yet.</string>
+    <string name="tulkki_api_key_storage_unavailable">Unavailable: the Keystore-backed store could not be opened, so the key can neither be read nor saved.</string>
+
+    <string name="tulkki_api_base_url">API base URL</string>
+    <string name="tulkki_api_base_url_dialog">Where DeepSeek is reached; the default is the real API</string>
+    <string name="tulkki_api_base_url_summary">Requests go to %1$s</string>
+
+    <string name="tulkki_usage">Ledger</string>
+    <string name="tulkki_usage_summary">What this app has spent, and how much credit is left</string>
+
+    <string name="tulkki_usage_title">Ledger</string>
+    <string name="tulkki_usage_balance_label">Credit left</string>
+    <string name="tulkki_usage_no_balance">—</string>
+    <string name="tulkki_usage_fetched">Fetched %1$s</string>
+    <string name="tulkki_usage_checking">Checking with DeepSeek…</string>
+    <string name="tulkki_usage_no_key">No DeepSeek key yet. Add one in Tulkki settings.</string>
+    <string name="tulkki_usage_failed">Could not read the balance: %1$s</string>
+    <string name="tulkki_usage_cannot_pay">This account cannot pay for DeepSeek calls, so nothing is translated or sent.</string>
+    <string name="tulkki_usage_no_yuan">The account has no yuan balance to show.</string>
+
+    <string name="tulkki_usage_tokens_title">Today\u2019s tokens</string>
+    <string name="tulkki_usage_tokens_of_cap">%1$s of %2$s tokens</string>
+    <string name="tulkki_usage_tokens_none">No daily cap is set.</string>
+    <string name="tulkki_usage_tokens_description">Today\u2019s tokens against the daily cap</string>
+    <string name="tulkki_usage_cap_reached">The daily cap is reached; DeepSeek calls stop until tomorrow or the cap is raised.</string>
+
+    <!--
+      This app's own spend, estimated from its own token counts. It is deliberately not the balance:
+      the balance is account-wide and is the truth about what is left, while this is what Tulkki itself
+      has spent. DeepSeek has no spend endpoint at all, so this is arithmetic on the usage every
+      completion returns, and the screen says so. %1$s is the model the app sends, %2$s the model
+      whose published rates these are, %3$s the day the defaults were read off the pricing page.
+    -->
+    <string name="tulkki_usage_spend_title">This app\u2019s spend (estimated)</string>
+    <string name="tulkki_usage_spend_note">Estimated from this app\u2019s own token counts, because DeepSeek reports no spend history. Priced as %1$s at the published %2$s rates of %3$s: peak \u00a5%4$s cache hit, \u00a5%5$s cache miss, \u00a5%6$s output per 1M tokens, and off-peak is %7$s%% of each. Tap a price below to correct it.</string>
+    <string name="tulkki_usage_spend_note_derived">Estimated from this app\u2019s own token counts, because DeepSeek reports no spend history. %1$s has no published row in this build, so it is priced from the %2$s row, which is an approximation: peak \u00a5%3$s cache hit, \u00a5%4$s cache miss, \u00a5%5$s output per 1M tokens, and off-peak is %6$s%% of each. Tap a price below to correct it.</string>
+    <string name="tulkki_usage_spend_caveat">Each call\u2019s tariff is decided from its own instant in UTC, so the phone\u2019s timezone cannot move a call between peak and off-peak; the day it is filed under is the phone\u2019s own local day, which is not DeepSeek\u2019s Beijing one.</string>
+    <string name="tulkki_usage_spend_empty">Nothing recorded yet: no DeepSeek call has been billed to this app.</string>
+    <string name="tulkki_usage_spend_total">Total across the %1$d days shown: %2$s</string>
+    <string name="tulkki_usage_spend_day_tokens">%1$s tokens \u00b7 hit %2$s \u00b7 miss %3$s \u00b7 out %4$s</string>
+    <string name="tulkki_usage_spend_day_hint">Tap a day to see where its tokens went.</string>
+
+    <!--
+      A day's drill-down: which places the day's tokens went to. A bucket is named by the
+      conversation's own address when the read resolved one, and by its kind otherwise. A conversation
+      the owner has deleted labels itself rather than showing the uuid the ledger stored, and a
+      catch-up batch that covered several rooms is its own sentence - never "not tied to a room",
+      which is the calls that belonged to no conversation at all.
+    -->
+    <string name="tulkki_usage_breakdown_not_tied_to_a_room">Not tied to a room</string>
+    <string name="tulkki_usage_breakdown_group_chat">A group chat</string>
+    <string name="tulkki_usage_breakdown_one_to_one">A one-to-one conversation</string>
+    <string name="tulkki_usage_breakdown_multi_room">Several rooms in one request</string>
+    <string name="tulkki_usage_breakdown_deleted">A conversation that is no longer here</string>
+    <string name="tulkki_usage_breakdown_empty">No per-place record for this day.</string>
+    <string name="tulkki_usage_breakdown_broken">This day\u2019s split does not add up to the day\u2019s own figure, so it is not shown. The figure on the row above is still what was spent.</string>
+
+    <!--
+      The tariff itself: where the prices and the peak hours came from, and when. DeepSeek publishes
+      them on a page and exposes them nowhere in the API, so they can be refreshed by reading that
+      page (see TariffPage) instead of by waiting for a release. A failed read changes nothing, and
+      says so here.
+    -->
+    <string name="tulkki_usage_tariff_title">Tariff</string>
+    <string name="tulkki_usage_tariff_built_in">Prices and peak hours are the ones this build shipped, read off DeepSeek\u2019s page on %1$s.</string>
+    <string name="tulkki_usage_tariff_fetched">Prices and peak hours read from DeepSeek\u2019s page on %1$s.</string>
+    <string name="tulkki_usage_tariff_partial">Prices read from DeepSeek\u2019s page on %1$s; its sentence about the peak hours could not be read, so the shipped hours are still in force.</string>
+    <string name="tulkki_usage_tariff_failed">The pricing page could not be read (%1$s), so the prices and hours in force are unchanged.</string>
+    <string name="tulkki_usage_tariff_unreadable">the page did not look like DeepSeek\u2019s price table</string>
+    <string name="tulkki_usage_tariff_hours">Peak: %1$s Beijing time, Monday to Friday, excluding Chinese public holidays; everything else is off-peak, at %2$s%% of the peak price.</string>
+    <string name="tulkki_usage_tariff_holidays">Chinese public holidays are the published ranges of %1$d; a year the table does not name is priced as if it had no holidays, which errs high.</string>
+
+    <!--
+      The three prices, edited here rather than in the settings screen: the figures they price are on
+      this screen, so correcting one is a tap on the number rather than a trip to another screen with
+      the number in mind. Clearing a field is how the page's number (or the build's) comes back, which
+      is why there is no reset row.
+    -->
+    <string name="tulkki_usage_prices_title">Prices (tap to correct)</string>
+    <string name="tulkki_usage_prices_hint">Per 1M tokens at peak. Clearing a field puts back the number read from DeepSeek\u2019s page, or the one this build shipped.</string>
+    <string name="tulkki_usage_price_row">%1$s: \u00a5%2$s</string>
+
+    <!--
+      GET /models reports ids and no prices. It cannot make the estimate exact; it can catch a model
+      name the key does not offer, which is the one error that would make every figure above wrong
+      with nothing on screen to show it. A failed read never empties the estimate.
+    -->
+    <string name="tulkki_usage_models_title">Models this key can use</string>
+    <string name="tulkki_usage_models_empty">The key listed no models.</string>
+    <string name="tulkki_usage_models_unreadable">Could not read the model list: %1$s</string>
+    <string name="tulkki_usage_models_missing">The app sends %1$s, which this key does not offer. The name was retired or misspelled, so the figures above are priced from a fallback row and may be wrong.</string>
+
+    <string name="tulkki_usage_refresh">Refresh</string>
+
+    <!--
+      The top-up row in Tulkki's settings, and the screen it opens: the DeepSeek platform's own
+      top-up page in a WebView (uk.xa0.tulkki.ui.TopUpActivity). The row is worded around adding
+      credit rather than around leaving the app, because the point of it is that nobody has to.
+      The failure lines are the shape to expect here: the platform is behind bot protection, and a
+      client it does not like is answered with a 403 instead of the page.
+    -->
+    <string name="tulkki_top_up">Top up</string>
+    <string name="tulkki_top_up_summary">Add credit to the DeepSeek account</string>
+    <string name="tulkki_top_up_title">Top up</string>
+    <string name="tulkki_top_up_error_title">The page did not load</string>
+    <string name="tulkki_top_up_error_failed">Could not load %1$s: %2$s</string>
+    <string name="tulkki_top_up_error_http">DeepSeek answered %1$d for %2$s</string>
+    <string name="tulkki_top_up_error_hint">Check the connection and try again.</string>
+    <string name="tulkki_top_up_retry">Try again</string>
+    <!-- Something the page asked the phone to do and no app on it can: said rather than swallowed. -->
+    <string name="tulkki_top_up_unhandled">Nothing on this phone can open %1$s</string>
+
+    <!--
+      The translation-failures screen. The reasons themselves are not here: they are the cover's own
+      vocabulary (tulkki_failure_*), rendered by uk.xa0.tulkki.ui.TranslationText, so this screen says
+      "no DeepSeek key is set" in exactly the words the usage screen already uses for it. What is here
+      is the screen's own frame - the rule it obeys, the shape of a row, and whether the failure will
+      be retried. The message's own text is on each row, the owner's deliberate exception for this one
+      diagnostic surface: a failure the owner cannot recognise is one they cannot act on.
+    -->
+    <string name="tulkki_failures">Translation failures</string>
+    <string name="tulkki_failures_summary">What failed recently, and why</string>
+    <string name="tulkki_failures_title">Translation failures</string>
+    <string name="tulkki_failures_intro">Recent translation failures, newest first. Each row shows the message it is about, so you can recognise what failed.</string>
+    <string name="tulkki_failures_blocked">Right now nothing is being translated: %1$s.</string>
+    <string name="tulkki_failures_none">No translation has failed.</string>
+    <!--
+      The time on a row, and which of the two it is: a failure's own time, or the message's. The row
+      says which, and says whether the message was one received or one you were sending - when and
+      which conversation are all a row has to identify itself with. A row whose failure time was not
+      recorded must not read as if it had one.
+    -->
+    <string name="tulkki_failures_when_failed">Failed %1$s \u00b7 %2$s</string>
+    <string name="tulkki_failures_when_arrived">Arrived %1$s \u00b7 %2$s</string>
+    <string name="tulkki_failures_when_send_failed">Send failed %1$s \u00b7 %2$s</string>
+    <string name="tulkki_failures_when_written">Written %1$s \u00b7 %2$s</string>
+    <string name="tulkki_failures_unknown_conversation">A conversation that is no longer here</string>
+    <!--
+      A failed send's reason is kept only for the newest failure, so an older one has to say that
+      rather than show the last failure's words as if they were its own.
+    -->
+    <string name="tulkki_failures_reason_not_kept">Why this one failed was not kept</string>
+    <string name="tulkki_failures_will_retry">Will be tried again</string>
+    <string name="tulkki_failures_gave_up">No more attempts will be made</string>
+    <!--
+      A send is the owner's, not the queue's: it stays held in the composer until they retry it, so the
+      row says what is true of it rather than promising an attempt nothing made.
+    -->
+    <string name="tulkki_failures_held">Held, not sent</string>
+    <!--
+      The failures row's own action, and the same meaning the covered bubble's tap carries: translate
+      this one message now. The held send's two actions reuse the composer bar's own strings
+      (tulkki_hold_send_as_written, and the owner's editable retry wording), because they are the same
+      buttons and must not say two different things.
+    -->
+    <string name="tulkki_failures_translate_now">Translate now</string>
+
+    <!--
+      The reading aid's sheet. The labels are the fields of a gloss; the failure captions come from
+      the cover's own strings, so a lookup that could not happen says the same thing a covered bubble
+      would.
+    -->
+    <string name="tulkki_gloss_dictionary">Dictionary form</string>
+    <string name="tulkki_gloss_ending">Ending</string>
+    <string name="tulkki_gloss_case">Case</string>
+    <string name="tulkki_gloss_meaning">Meaning</string>
+    <string name="tulkki_gloss_nothing">Nothing to look up here.</string>
+
+    <!--
+      The two sides of a translated bubble. The first is the one a screen reader hears for the drawn
+      second half; the second is what it is told about the half that is never readable. The language
+      is filled in from the conversation's resolved language, never written down here.
+    -->
+    <string name="tulkki_second_half_sent">What was sent, in %1$s</string>
+    <string name="tulkki_second_half_original">The original, in %1$s, is not shown</string>
+
+    <!--
+      The review's way in: the row in a bubble's own long-press menu, and the title of the surface it
+      opens. It names what the notes are about rather than calling them a "review", because the notes
+      are about the owner's own wording. The remarks themselves are in the study language and are
+      never written down here.
+    -->
+    <string name="tulkki_review">Notes on your wording</string>
+
+    <!--
+      The three instructions, editable. Each row opens the wording that is actually sent, so an owner
+      who never edits one sees exactly what the app says on their behalf. The placeholder is %1$s (and
+      %2$s in the review, which is the only instruction with two languages in it): the language's name
+      is substituted at request time, so an instruction can never be pinned to the language that
+      happened to be set when it was written. Clearing a field restores the shipped wording, which is
+      why there is no separate "reset" row to drift from it.
+    -->
+    <string name="tulkki_prompts">Prompts</string>
+    <string name="tulkki_prompts_summary">What Tulkki sends with every request, and what you can rewrite</string>
+    <string name="tulkki_prompt_translate">Translation instruction</string>
+    <string name="tulkki_prompt_review">Instruction for the notes</string>
+    <string name="tulkki_prompt_gloss">Instruction for a tapped word</string>
+    <string name="tulkki_prompt_translate_hint">%1$s is the language the message is translated into. The field opens holding the wording Tulkki ships.</string>
+    <string name="tulkki_prompt_review_hint">%1$s is the language the message is translated into; %2$s is the language the notes are written in.</string>
+    <string name="tulkki_prompt_gloss_hint">%1$s is the language a tapped word is explained in.</string>
+    <string name="tulkki_prompt_shipped">Shipped wording. %1$s</string>
+    <string name="tulkki_prompt_edited">Yours, %1$s characters. %2$s</string>
+    <string name="tulkki_prompt_clear_hint">Clear this field to go back to the shipped wording.</string>
+
+    <!--
+      The recording timer's own tap, which is the whole of the pause control: the tree's timer was a
+      bare TextView that paused a live recording and resumed a paused one, and it said nothing to a
+      screen reader in either state. The gesture is unchanged; only its name is new, and it names the
+      action rather than the bar.
+    -->
+    <string name="tulkki_recording_pause">Pause recording</string>
+    <string name="tulkki_recording_resume">Resume recording</string>
+</resources>

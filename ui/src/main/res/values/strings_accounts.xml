@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The strings the accounts family needs and `strings.xml` (frozen) does not carry. The two dialler
+  rows were hardcoded English literals in the deleted `activity_manage_accounts.xml`, so they are
+  strings now, which is where XML belongs.
+-->
+<resources>
+    <string name="manage_phone_accounts">Manage Phone Accounts</string>
+    <string name="dialler_integration">Android system dialler integration</string>
+</resources>

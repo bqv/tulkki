@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The account editor's own copy. One file for the lane, as the brief asks, so a string that only
+  this screen draws does not land in the shared `strings.xml` another lane is editing.
+
+  Every entry here was a literal in `EditAccountActivity`'s Kotlin (the deleted-layout lane moves UI
+  copy out of code) or is the one letter-case change the screen needed. Nothing new is invented:
+  each `name` maps to the exact sentence the old code showed.
+-->
+<resources>
+
+    <!-- `binding.accountJidLayout.setHint("Snikket Address")` for the `snikket` extra. -->
+    <string name="editaccount_snikket_address">Snikket Address</string>
+
+    <!-- `showQrCodeDialog`'s title, action button and two failure toasts. -->
+    <string name="editaccount_vcard_qr_title">vCard QR code</string>
+    <string name="editaccount_vcard_qr_empty">No profile data to generate a QR code</string>
+    <string name="editaccount_vcard_qr_failed">Could not generate the QR code</string>
+
+    <!-- `MaterialTimePicker.Builder().setTitleText(...)` in the quiet-hours boxes. -->
+    <string name="editaccount_quiet_hours_start_title">Quiet hours start</string>
+    <string name="editaccount_quiet_hours_end_title">Quiet hours end</string>
+
+    <!-- The known-hosts drop-down's accessible name; the old `MaterialAutoCompleteTextView`
+         announced itself with the field's own hint and had no separate description. -->
+    <string name="editaccount_known_hosts">Known servers</string>
+
+    <!-- The vCard row's type selector's accessible name; the old `Spinner` announced its selection. -->
+    <string name="editaccount_vcard_type">Profile field type</string>
+
+</resources>

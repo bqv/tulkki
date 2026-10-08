@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="blue_desaturated_light">#4D7fa9c5</color>
+	<color name="blue_desaturated">#ff7189c5</color>
+	<color name="black_blue">#3e5ea2</color>
+	<color name="blacker_blue">#283D6A</color>
+	<color name="yeller">#FFC700</color>
+	<color name="white">#FFFFFF</color>
+
+
+	<color name="crop_image_view_background">#BB000000</color>
+	<color name="editor_draw_default_color">#000000</color>
+	<color name="black26">#42000000</color>
+
+	<!--
+	  Tulkki: the composer's language chip had its own measured palette here - a neutral outline for
+	  the state the app worked out itself, the app's own blue for the state the owner chose, with
+	  every rendered figure beside the values and values-night/colors.xml carrying the dark halves.
+	  It went with the Java chip's three views: the drawn chip is
+	  `conversation/ConversationComposer.kt`'s `LanguagePairBlock` now, on theme attributes, saying
+	  detected-or-set in words rather than in a border and a fill. The figures live in history if a
+	  Compose pill is ever wanted back.
+	-->
+</resources>

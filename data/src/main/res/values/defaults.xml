@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pasted down by the 3.8 boundary commit cb2510681b: its rule puts a resource
+     definition in the module of its lowest-ranked reader, because that is the
+     only module every reader can name. -->
+<resources>
+    <bool name="align_start">false</bool>
+    <bool name="allow_screenshots">true</bool>
+    <bool name="call_integration">true</bool>
+    <bool name="enforce_dane">false</bool>
+    <bool name="large_font">false</bool>
+    <bool name="require_channel_binding">false</bool>
+    <bool name="require_tls_v1_3">true</bool>
+    <bool name="send_crash_reports">false</bool>
+    <bool name="show_avatars">false</bool>
+    <bool name="show_connection_options">false</bool>
+    <bool name="show_link_previews">true</bool>
+    <bool name="trust_system_ca_store">true</bool>
+    <bool name="use_green_background">false</bool>
+    <bool name="use_relays">false</bool>
+    <string name="incoming_call_ringtone">content://settings/system/ringtone</string>
+    <string name="notification_ringtone">content://settings/system/notification_sound</string>
+</resources>

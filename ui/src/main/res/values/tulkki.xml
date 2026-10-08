@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tulkki's own user-facing strings. Kept in their own file so upstream's strings.xml stays as close
+  to untouched as possible and a rebase stays mechanical.
+-->
+<resources>
+    <!-- Shown wherever a message needed translating and did not get one: a place that cannot cover
+         the body itself (a notification, a conversation-list preview) says this instead of leaking
+         the original. -->
+    <string name="tulkki_untranslated">Not translated yet</string>
+    <!-- The same state inside the conversation, where a tap asks for this one message to be
+         translated. The original is never shown, by design, so the tap is the way out. -->
+    <string name="tulkki_untranslated_tap">Not translated yet - tap to translate</string>
+    <!-- Refusing to copy or share a body that is still covered. -->
+    <string name="tulkki_untranslated_reveal">Not translated yet - tap the message to translate it</string>
+
+    <!-- What a covered message says for itself, once there is more to say than "not translated".
+         The request is in flight. -->
+    <string name="tulkki_cover_translating">Translating…</string>
+    <!-- Pointing at this body cannot help: ciphertext, a file, an edit or a reaction. -->
+    <string name="tulkki_cover_cannot">This message cannot be translated</string>
+    <string name="tulkki_cover_no_key">No DeepSeek key - add one in Tulkki settings</string>
+    <string name="tulkki_cover_cap_reached">Daily token cap reached - nothing more is translated today</string>
+    <string name="tulkki_cover_no_credit">The DeepSeek account has no credit left</string>
+    <string name="tulkki_cover_unreachable">DeepSeek is unreachable - tap to try again</string>
+    <string name="tulkki_cover_rejected_key">DeepSeek rejected the API key - check it in Tulkki settings</string>
+    <string name="tulkki_cover_failed">DeepSeek could not translate this message - tap to try again</string>
+
+    <!-- The same reasons as a plain phrase, for the usage screen's "last failure" line: no tap to
+         offer there, so no instruction to tap. -->
+    <string name="tulkki_failure_no_key">no DeepSeek key is set</string>
+    <string name="tulkki_failure_cap_reached">the daily token cap is reached</string>
+    <string name="tulkki_failure_no_credit">the account has no credit left</string>
+    <string name="tulkki_failure_unreachable">DeepSeek is unreachable</string>
+    <string name="tulkki_failure_rejected_key">DeepSeek rejected the API key</string>
+    <string name="tulkki_failure_failed">DeepSeek could not translate the message</string>
+    <string name="tulkki_failure_doubt">the translation could not be confirmed</string>
+
+    <!-- The usage screen's activity summary: what Tulkki has done today, and what stopped it. -->
+    <string name="tulkki_usage_activity_title">Activity</string>
+    <string name="tulkki_usage_activity">Translated today: %1$d</string>
+    <string name="tulkki_usage_activity_waiting">Waiting for a translation: %1$d</string>
+    <string name="tulkki_usage_last_failure">Last failure: %1$s</string>
+    <string name="tulkki_usage_last_failure_detail">%1$s (%2$s)</string>
+    <string name="tulkki_usage_no_failure">No translation has failed yet.</string>
+</resources>

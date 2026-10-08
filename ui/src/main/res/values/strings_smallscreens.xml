@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tulkki: the small-screens family's own copy. The scanner was the one screen here whose title
+     was a hardcoded English literal in `ScanActivity` rather than a resource, and the frozen
+     `strings.xml` is where a string would normally live; this file keeps it out of the frozen file
+     and is the family's one home for strings from here on. -->
+<resources>
+    <string name="scan_contact_qr_code">Scan Contact QR Code</string>
+</resources>

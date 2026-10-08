@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="TAG_ACCOUNT"/>
+    <item type="id" name="TAG_FINGERPRINT"/>
+    <item type="id" name="TAG_FINGERPRINT_STATUS"/>
+    <item type="id" name="TAG_AUDIO_PLAYER_VIEW_HOLDER"/>
+    <item type="id" name="TAG_DRAGGABLE"/>
+    <item type="id" name="swipe_listener_tag"/>
+    <!-- Tulkki: the original a concealed view is currently drawing, so a recycled view cannot draw
+         the previous message's smear; see uk.xa0.tulkki.ui.ConcealedText. -->
+    <item type="id" name="tulkki_concealed_source"/>
+    <!-- Tulkki: ids whose menus are gone but whose ints the code still reads. The conversation-row
+         ids drive the Compose list's row menu (ConversationListFragment's menuId,
+         ConversationFragment's handlers). -->
+    <item type="id" name="action_toggle_pinned"/>
+    <item type="id" name="action_mute"/>
+    <item type="id" name="action_unmute"/>
+    <item type="id" name="action_ongoing_call"/>
+    <item type="id" name="action_muc_details"/>
+    <item type="id" name="action_archive"/>
+    <!-- Tulkki: ids whose declaring menus the details conversion deleted. `R.menu.contact_details`
+         declared `action_block` and `action_unblock` (and `R.menu.conference_photo` declared
+         `action_block` again); `ConversationFragment`'s own menu handler still reads both by id. -->
+    <item type="id" name="action_block"/>
+    <item type="id" name="action_unblock"/>
+    <!-- Tulkki: the fragment containers `activity_conversation_list.xml` and its `layout-w945dp`
+         twin declared before the conversation-list conversion deleted them. `ConversationFragment`
+         still reads `secondary_fragment` itself, and `ConversationLookup` reads both. -->
+    <item type="id" name="main_fragment"/>
+    <item type="id" name="secondary_fragment"/>
+    <!-- Tulkki: the new-chat screen's four FAB ids. `menu/start_conversation_fab_submenu.xml`
+         declared them and was deleted with the screen's conversion, but they are not only menu ids:
+         three are the `EXTRA_GOTO` values `ConversationListActivity` passes to
+         `StartConversationActivity.launch`, and the fourth is compared to the same extra. -->
+    <item type="id" name="discover_public_channels"/>
+    <item type="id" name="create_public_channel"/>
+    <item type="id" name="create_private_group_chat"/>
+    <item type="id" name="create_contact"/>
+    <!-- Tulkki: the new-chat screen's two row menus. `menu/contact_context.xml` declared
+         `context_contact_details`, `context_show_qr`, `context_contact_block_unblock` and
+         `context_delete_contact`; `menu/conference_context.xml` declared `context_delete_conference`
+         and `context_share_uri`. Both were deleted with the conversion of the row long press, and
+         `StartConversationActivity.configureRowMenu` now builds those items itself while
+         `handleRowMenu` still answers each by id. -->
+    <item type="id" name="context_contact_details"/>
+    <item type="id" name="context_show_qr"/>
+    <item type="id" name="context_contact_block_unblock"/>
+    <item type="id" name="context_delete_contact"/>
+    <item type="id" name="context_delete_conference"/>
+    <item type="id" name="context_share_uri"/>
+    <!-- Tulkki: the OTR verification choices, whose menu file is gone
+         (`verification_choices.xml`): the three verbs are the Compose row menu's now, in
+         ConversationFragment, and the ids are what its dispatcher compares. -->
+    <item type="id" name="ask_question"/>
+    <item type="id" name="manual_verification"/>
+    <item type="id" name="blind_trust"/>
+    <!-- Tulkki: the participant menu's ids, whose menu file is gone
+         (`muc_details_context.xml`). `MucDetailsContextMenuHelper` is Compose-shaped and reads these
+         as its `MucDetailsAction` mapping, so the ints outlive the menu that declared them;
+         `action_contact_details` is also a conversation row menu's verb. -->
+    <item type="id" name="start_conversation"/>
+    <item type="id" name="action_show_avatar"/>
+    <item type="id" name="action_contact_details"/>
+    <item type="id" name="action_block_avatar"/>
+    <item type="id" name="action_mute_participant"/>
+    <item type="id" name="action_unmute_participant"/>
+    <item type="id" name="invite"/>
+    <item type="id" name="send_private_message"/>
+    <item type="id" name="share_contact_details"/>
+    <item type="id" name="manage_permissions"/>
+    <item type="id" name="remove_from_room"/>
+    <!-- Tulkki: the conversation menu's ids, whose menu file is gone
+         (`fragment_conversation.xml`). The attach rows are the Compose attach menu's now; the rest are
+         the conversation's verbs, and `onOptionsItemSelected` still answers them - the
+         conversation-list row menu routes eight of them into the fragment through that one method, and
+         the others are the verbs a conversation's own chrome has yet to offer. An id declared here is
+         the same stable `R.id` the menu declared. -->
+    <item type="id" name="attach_choose_file"/>
+    <item type="id" name="attach_choose_picture"/>
+    <item type="id" name="attach_record_video"/>
+    <item type="id" name="attach_take_picture"/>
+    <item type="id" name="attach_record_voice"/>
+    <item type="id" name="attach_location"/>
+    <item type="id" name="attach_live_location"/>
+    <item type="id" name="attach_subject"/>
+    <item type="id" name="attach_schedule"/>
+    <item type="id" name="action_search"/>
+    <item type="id" name="action_open_calendar"/>
+    <item type="id" name="action_muc_participants"/>
+    <item type="id" name="action_invite"/>
+    <item type="id" name="action_clear_history"/>
+    <item type="id" name="action_set_custom_bg"/>
+    <item type="id" name="action_delete_custom_bg"/>
+    <item type="id" name="action_audio_call"/>
+    <item type="id" name="action_video_call"/>
+    <item type="id" name="action_add_shortcut"/>
+    <item type="id" name="action_refresh_feature_discovery"/>
+    <!-- The deleted menu's submenu parent, still named by the configurator that hid it. -->
+    <item type="id" name="action_attach_file"/>
+    <!-- Tulkki: the conversation's four Compose popups (`one_on_one_context`, `account_context`,
+         `block` and `block_muc`), whose files are gone. `action_show_qr_code` is also compared in
+         `XmppActivity`; the rest are the popups' own dispatchers. These were the per-lane
+         `values/ids_hub.xml` until this file became the tree's one home for ids. -->
+    <item type="id" name="reject"/>
+    <item type="id" name="block_domain"/>
+    <item type="id" name="block_contact"/>
+    <item type="id" name="add_contact"/>
+    <item type="id" name="add_bookmark"/>
+    <item type="id" name="action_account_details"/>
+    <item type="id" name="action_manage_accounts"/>
+    <item type="id" name="action_show_qr_code"/>
+    <!-- The command page's own id. The layout that declared it is deleted, and it must survive:
+         `Conversation.setupViewPager(..., commandsViewId)` looks the second page's list up with it
+         (`page2.findViewById(commandsViewId)`), so this is the id the command page's `ComposeView`
+         carries. -->
+    <item type="id" name="commands_view"/>
+    <!-- Tulkki: the four menu ids `XmppActivity.onOptionsItemSelected` still compares as ints. The
+         conversation list's `menu/fragment_conversation_list.xml` declared all four and was deleted
+         with the conversation-list conversion (`4222e2c57f`, "delete: the conversation list's two
+         layouts and four menus"); `menu/editaccount.xml` declared `action_settings` again and was
+         deleted with the account editor's chrome conversion (`ba1f65667c`). Other converted screens'
+         menus declared them too, and every one of those menu files is gone. The ids outlive their
+         menus, so each is declared here as the same stable `R.id` the menu declared. -->
+    <item type="id" name="action_settings"/>
+    <item type="id" name="action_privacy_policy"/>
+    <item type="id" name="action_accounts"/>
+    <item type="id" name="action_account"/>
+</resources>

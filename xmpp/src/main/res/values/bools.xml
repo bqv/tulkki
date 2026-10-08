@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pasted down by the 3.8 boundary commit cb2510681b: its rule puts a resource
+     definition in the module of its lowest-ranked reader, because that is the
+     only module every reader can name. -->
+<resources>
+    <bool name="disable_reactions_fallback">false</bool>
+    <bool name="show_thread_feature">false</bool>
+    <bool name="showtextformatting">false</bool>
+    <bool name="use_colored_muc_names">false</bool>
+    <bool name="use_i2p">false</bool>
+</resources>

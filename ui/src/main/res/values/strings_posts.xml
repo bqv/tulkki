@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tulkki: the posts family's own copy. The feed is the only screen that names a like twice, and
+     the second one is the tap's own promise: the button drawn with the owner's like already on is
+     the tap that takes it back. It is a separate file so the frozen `strings.xml` never moves. -->
+<resources>
+    <string name="unlike">Remove like</string>
+</resources>

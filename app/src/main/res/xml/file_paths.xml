@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Internal app storage (getFilesDir()) -->
+    <files-path name="secure_media" path="media/" />
+    <files-path name="avatars"      path="avatars/" />
+    <files-path name="stories"      path="stories/" />
+    <!-- Camera captures written to public DCIM (getTakePhotoUri / getTakeVideoUri) -->
+    <external-path name="ext_dcim_camera" path="DCIM/Camera/" />
+    <!-- Received files, recordings and backups saved under Documents/Tulkki/
+         (getStorageLocation, setupNomedia, ExportBackupWorker's getBackupDirectory) -->
+    <external-path name="ext_documents"   path="Documents/Tulkki/" />
+</paths>

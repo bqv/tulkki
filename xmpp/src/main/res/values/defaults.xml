@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pasted down by the 3.8 boundary commit cb2510681b: its rule puts a resource
+     definition in the module of its lowest-ranked reader, because that is the
+     only module every reader can name. -->
+<resources>
+    <bool name="allow_message_correction">true</bool>
+    <bool name="auto_accept_unmetered">true</bool>
+    <bool name="away_when_screen_off">true</bool>
+    <bool name="btbv">true</bool>
+    <bool name="chat_states">true</bool>
+    <bool name="confirm_messages">true</bool>
+    <bool name="default_nomedia">true</bool>
+    <bool name="dnd_on_silent_mode">false</bool>
+    <bool name="last_activity">true</bool>
+    <bool name="manually_change_presence">false</bool>
+    <bool name="notifications_from_strangers">true</bool>
+    <bool name="treat_vibrate_as_silent">false</bool>
+    <bool name="use_tor">false</bool>
+    <integer name="auto_accept_filesize">3490000</integer>
+    <integer name="automatic_message_deletion">0</integer>
+    <integer name="grace_period">144</integer>
+    <integer name="omemo_auto_expiry">5184000</integer>
+    <string name="default_resource">Phone</string>
+    <string name="picture_compression">auto</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pasted down by the 3.8 boundary commit cb2510681b: its rule puts a resource
+     definition in the module of its lowest-ranked reader, because that is the
+     only module every reader can name. -->
+<resources>
+    <string name="bad_key_for_encryption">Bad key for encryption.</string>
+    <string name="openpgp_error">OpenKeychain produced an error.</string>
+</resources>

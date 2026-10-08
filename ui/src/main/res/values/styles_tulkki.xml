@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tulkki's own styles, kept in their own file for the same reason the strings are: upstream's
+  resources stay as close to untouched as possible and a rebase stays mechanical.
+-->
+<resources>
+    <!--
+      One price on the Ledger, as a tappable line. It is a TextView rather than a Button because it
+      reads as a figure with a label - "Peak price: cached input: ¥0.04" - and the ripple is what says
+      it can be touched, so the row must stay clickable, focusable and backed by the selectable
+      background: a row that only looks like the others is a row nobody taps.
+    -->
+    <style name="TulkkiPriceRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textAppearance">?textAppearanceBodyMedium</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+</resources>

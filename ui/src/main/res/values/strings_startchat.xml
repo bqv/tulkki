@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The new-chat lane's own strings. Tulkki keeps one file per converted family rather than growing
+    res/values/strings.xml (frozen), so the JID dialog's one new string lives here.
+-->
+<resources>
+    <!--
+        The JID dialog's second button while it warns that the typed address is a domain. The
+        deleted fragment set this label on its negative button as the literal "Browse"; it is a
+        resource now, and the wording is unchanged.
+    -->
+    <string name="enter_jid_browse">Browse</string>
+</resources>

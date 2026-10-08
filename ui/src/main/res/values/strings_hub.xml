@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Tulkki: the conversation's own strings.
+
+  One string, because everything else the conversation draws already had one: the command page's
+  onboarding note was the only user-facing sentence the conversation's layout carried as literal text
+  (in `commands_view`'s `commands_note` `TextView`), and a Compose surface names its words through a
+  resource. The wording is that `TextView`'s, byte for byte - it is the app's copy, and this is a move
+  and not a rewrite.
+-->
+<resources>
+    <!-- The command page's note while the account is still being onboarded. Upstream's wording. -->
+    <string name="hub_commands_note">If you have made payment via Bitcoin, eTransfer, or mail, hold tight for your notification. Otherwise you can pick up where you left off by tapping Register with Backend above (you may be asked a few of the same questions but it will generally not ask you to pay again if you already did, etc).</string>
+</resources>

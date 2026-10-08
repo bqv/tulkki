@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pasted down by the 3.8 boundary commit cb2510681b: its rule puts a resource
+     definition in the module of its lowest-ranked reader, because that is the
+     only module every reader can name. -->
+<resources>
+    <string name="account_already_exists">This account already exists</string>
+    <string name="certificate_chain_is_not_trusted">Untrusted certificate chain</string>
+    <string name="certificate_does_not_contain_jid">Certificate does not contain a XMPP address</string>
+    <string name="conference_creation_failed">Could not create group chat</string>
+    <string name="could_not_change_affiliation">Could not change affiliation of %s</string>
+    <string name="download_failed_could_not_connect">Download failed: Could not connect to host</string>
+    <string name="download_failed_could_not_write_file">Download failed: Could not write file</string>
+    <string name="download_failed_file_not_found">Download failed: File not found</string>
+    <string name="download_failed_invalid_file">Download failed: Invalid file</string>
+    <string name="download_failed_server_not_found">Download failed: Server not found</string>
+    <string name="encryption_choice_omemo">OMEMO</string>
+    <string name="encryption_choice_otr">OTR</string>
+    <string name="encryption_choice_pgp">OpenPGP</string>
+    <string name="encryption_choice_unencrypted">None</string>
+    <string name="error_deleting_story">Could not delete story</string>
+    <string name="error_publish_avatar_converting">Could not convert your picture</string>
+    <string name="error_publish_avatar_no_server_support">Your server does not support publicizing avatars</string>
+    <string name="error_publish_avatar_server_reject">The server rejected your publication</string>
+    <string name="error_saving_avatar">Could not save avatar to disk</string>
+    <string name="feature_not_implemented">Feature not implemented</string>
+    <string name="fetching_history_from_server">Fetching history from server</string>
+    <string name="install_orbot">Install Orbot</string>
+    <string name="is_requesting_to_speak">is requesting to speak</string>
+    <string name="jid_does_not_match_certificate">XMPP address does not match certificate</string>
+    <string name="joined_an_existing_channel">You’ve joined an existing channel</string>
+    <string name="mtm_accept_cert">Accept Unknown Certificate?</string>
+    <string name="mtm_cert_details">Certificate details:</string>
+    <string name="mtm_connect_anyway">Do you want to connect anyway?</string>
+    <string name="mtm_trust_anchor">The server certificate is not signed by a known Certificate Authority.</string>
+    <string name="nick_in_use">Nickname is already in use</string>
+    <string name="no_active_account">No active account</string>
+    <string name="no_conference_server_found">No group chat server found</string>
+    <string name="no_market_app_installed">No market app installed.</string>
+    <string name="no_more_history_on_server">No more history on server</string>
+    <string name="not_connected_try_again">You are not connected. Try again later</string>
+    <string name="not_fetching_history_retention_period">Not fetching messages due to local retention period.</string>
+    <string name="remote_server_timeout">Remote server timeout</string>
+    <string name="server_does_not_support_easy_onboarding_invites">Server does not support generating invites</string>
+    <string name="unable_to_connect_to_keychain">Could not connect to OpenKeychain</string>
+    <string name="unable_to_moderate">Unable to Moderate</string>
+    <string name="unable_to_parse_certificate">Could not parse certificate</string>
+    <string name="unable_to_parse_invite">Unable to parse invite</string>
+    <string name="unable_to_set_channel_configuration">Could not save channel configuration</string>
+    <string name="upload_failed_server_not_found">Upload failed. Server not found</string>
+</resources>

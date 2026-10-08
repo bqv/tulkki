@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The one id `activity_settings.xml` held that survived its deletion.
+
+  The settings screens stay fragments, so `SettingsActivity` needs a container to put them in and a
+  container needs an id. `res/values/ids.xml` is frozen for this lane, and this is a value, not a
+  screen: XML's home for the string an id is.
+-->
+<resources>
+    <item name="settings_fragment_container" type="id" />
+</resources>

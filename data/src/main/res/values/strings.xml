@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pasted down by the 3.8 boundary commit cb2510681b: its rule puts a resource
+     definition in the module of its lowest-ranked reader, because that is the
+     only module every reader can name. -->
+<resources>
+    <string name="account_state_logged_out">Logged out</string>
+    <string name="account_status_bind_failure">Bind failure</string>
+    <string name="account_status_channel_binding">Channel binding unavailable</string>
+    <string name="account_status_connecting">Connecting\u2026</string>
+    <string name="account_status_connection_timeout">Connection timeout</string>
+    <string name="account_status_disabled">Temporarily disabled</string>
+    <string name="account_status_host_unknown">Not responsible for domain</string>
+    <string name="account_status_i2p_unavailable">I2P network unavailable</string>
+    <string name="account_status_incompatible_client">Incompatible client</string>
+    <string name="account_status_incompatible_server">Incompatible server</string>
+    <string name="account_status_no_internet">No connectivity</string>
+    <string name="account_status_not_found">Server not found</string>
+    <string name="account_status_offline">Offline</string>
+    <string name="account_status_policy_violation">Policy violation</string>
+    <string name="account_status_regis_conflict">Username already in use</string>
+    <string name="account_status_regis_fail">Registration failed</string>
+    <string name="account_status_regis_invalid_token">Invalid registration token</string>
+    <string name="account_status_regis_not_sup">Registration not supported by server</string>
+    <string name="account_status_regis_success">Registration completed</string>
+    <string name="account_status_regis_web">Server requires registration on website</string>
+    <string name="account_status_stream_error">Stream error</string>
+    <string name="account_status_stream_opening_error">Stream opening error</string>
+    <string name="account_status_temporary_auth_failure">Temporary authentication failure</string>
+    <string name="account_status_tls_error">TLS negotiation failed</string>
+    <string name="account_status_tls_error_domain">Domain not verifiable</string>
+    <string name="account_status_tor_unavailable">Tor network unavailable</string>
+    <string name="account_status_unauthorized">Unauthorized</string>
+    <string name="account_status_unknown">Unknown</string>
+    <string name="action_execute">Go</string>
+    <string name="admin">Admin</string>
+    <string name="blocked">Blocked</string>
+    <string name="cancel">Cancel</string>
+    <string name="commands">Commands</string>
+    <string name="conversation">Conversation</string>
+    <string name="dane_failed">DANE failed</string>
+    <string name="emojis">Emojis</string>
+    <string name="error_compressing_image">Could not convert image file</string>
+    <string name="error_file_not_found">File not found</string>
+    <string name="error_io_exception">General I/O error. Maybe you ran out of storage space?</string>
+    <string name="error_not_an_image_file">The file you selected is not an image</string>
+    <string name="error_out_of_memory">Out of memory. Image too big</string>
+    <string name="error_security_exception">The app you used to share this file did not provide enough permissions.</string>
+    <string name="error_security_exception_during_image_copy">The app you used to select this image did not provide enough permissions to read the file.\n\n<small>Use a different file manager to choose an image</small>.</string>
+    <string name="error_unable_to_create_temporary_file">Could not create temporary file</string>
+    <string name="gifs">GIFs</string>
+    <string name="member">Member</string>
+    <string name="message">Message</string>
+    <string name="message_copied_to_clipboard">Message copied to clipboard</string>
+    <string name="missing_internet_permission">Grant permission to use the Internet</string>
+    <string name="moderator">Moderator</string>
+    <string name="no">No</string>
+    <string name="no_affiliation">No affiliation</string>
+    <string name="no_role">Offline</string>
+    <string name="outcast">Outcast</string>
+    <string name="owner">Owner</string>
+    <string name="participant">Participant</string>
+    <string name="payment_required">Payment required</string>
+    <string name="reconnect_on_other_host">Reconnect on other host</string>
+    <string name="registration_password_too_weak">Registration failed: Password too weak</string>
+    <string name="registration_please_wait">Registration failed: Try again later</string>
+    <string name="rtp_state_connected">Connected</string>
+    <string name="sasl_downgrade">Downgraded SASL mechanism</string>
+    <string name="session_failure">Session failure</string>
+    <string name="stickers">Stickers</string>
+    <string name="visitor">Muted</string>
+    <string name="yes">Yes</string>
+</resources>

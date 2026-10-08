@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The resources the two details screens need that no other screen owns.
+
+  Everything else they draw is an existing resource: the converted screens read
+  `R.string.action_contact_details` and its neighbours unchanged, and the tag pill, the section rule
+  and the ephemeral duration entries are the layouts' own drawables, colours and arrays.
+-->
+<resources>
+    <!--
+      The hint on the tag editors. Both deleted layouts hardcoded the literal `Tags` on the
+      `TagEditorView`, which is a hardcoded string rather than a resource; this is the same word,
+      given the name it should have had.
+    -->
+    <string name="details_tags_hint">Tags</string>
+</resources>

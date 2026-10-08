@@ -1,0 +1,35 @@
+# Argon2 known-answer vectors, captured from the in-tree C.
+#
+# Source:  app/src/main/jni/argon2/** - the implementation the JNI
+#          (org_signal_argon2_Argon2Native.c -> org.signal.argon2.Argon2) runs today,
+#          built by Android.mk:26-33 from ref.c (the scalar reference).
+# Call:    argon2_hash(t, m, p, pwd, pwdlen, salt, saltlen, out, outlen, enc, enclen,
+#                      Argon2_id, ARGON2_VERSION_13) - exactly the JNI's call.
+# Tool:    tools/argon2-vectors  (rebuilds this file; deterministic, no timings)
+#
+# The parameters below are the app's own, from Argon2KeyDerivation.kt:
+#   MEMORY_MIB = 64 -> 65536 KiB, ITERATIONS = 3, PARALLELISM = 4, KEY_BYTES = 32,
+#   Version.V13, Type.Argon2id. The published argon2 KATs use m=32 KiB; only these
+#   numbers say what byte-identity means for this app.
+parameters t=3 m=65536 p=4 out=32 type=argon2id version=19
+argon2.h sha256=25ed629feca91ca9d361441160c6fbc10318bb0fb3757555b418ed47b705b35b
+argon2.c sha256=b1289ec7134e8502e9113396fdac89402bf2575ee1b35e33fb7410f2fb63bb6d
+core.c sha256=d6ddc9e28c51d2c3b0d542c0c4678c4d9d788da048e4f557166030d0ef62618b
+ref.c sha256=9ac347fd8dc737af69bbb93d56ac8b4ab5488152f606880c8d7fc4592e207647
+vectors
+V1|pwd=empty|salt=S1(32B)
+V1|pwdlen=0|saltlen=32|rc=0|hash=7d8aeb76f74eaba0f5b1708d66319b2bc5c12bc262df52536dd0ce62f93bc7b6|enc=$argon2id$v=19$m=65536,t=3,p=4$AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8$fYrrdvdOq6D1sXCNZjGbK8XBK8Ji31JTbdDOYvk7x7Y|pwdhex=|salthex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+V2|pwd=32B-ascii|salt=S1(32B)
+V2|pwdlen=32|saltlen=32|rc=0|hash=d78a45e67056b11d02ea311b88ae6d4ffcee8fdb83f9ec4d373a3de4fdb317c6|enc=$argon2id$v=19$m=65536,t=3,p=4$AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8$14pF5nBWsR0C6jEbiK5tT/zuj9uD+exNNzo95P2zF8Y|pwdhex=3031323334353637383961626364656630313233343536373839616263646566|salthex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+V3|pwd=utf8-30B|salt=S2(32B)
+V3|pwdlen=30|saltlen=32|rc=0|hash=741077296d572b777e230edfded0ec8ef0ac3257c484aeafb23ace7ccaeea5f4|enc=$argon2id$v=19$m=65536,t=3,p=4$ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8$dBB3KW1XK3d+Iw7f3tDsjvCsMlfEhK6vsjrOfMrupfQ|pwdhex=73616c6173616e612dc3a4c3b6c3a52de697a5e69cace8aa9e2df09f9490|salthex=202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f
+V4|pwd=passphrase|salt=S4(32B)
+V4|pwdlen=28|saltlen=32|rc=0|hash=b7d5f94a21635fd43604b240e4548b011d05768a9da8636498071ef4e3ee08d4|enc=$argon2id$v=19$m=65536,t=3,p=4$MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY$t9X5SiFjX9Q2BLJA5FSLAR0FdoqdqGNkmAce9OPuCNQ|pwdhex=636f727265637420686f727365206261747465727920737461706c65|salthex=3031323334353637383961626364656630313233343536373839616263646566
+V5|pwd=8B|salt=S5(8B)
+V5|pwdlen=8|saltlen=8|rc=0|hash=4115e2445f85891e35818b383040a25828cafa4012fb6fc7440329ba5ff1b852|enc=$argon2id$v=19$m=65536,t=3,p=4$MTIzNDU2Nzg$QRXiRF+FiR41gYs4MECiWCjK+kAS+2/HRAMpul/xuFI|pwdhex=73616c6173616e61|salthex=3132333435363738
+V6|pwd=6B|salt=S3[0..16]
+V6|pwdlen=6|saltlen=16|rc=0|hash=5f60a9530e98ccc13143eb88f7d62d18330020ad2628876f1a244aae49f01f81|enc=$argon2id$v=19$m=65536,t=3,p=4$oKGio6SlpqeoqaqrrK2urw$X2CpUw6YzMExQ+uI99YtGDMAIK0mKIdvGiRKrknwH4E|pwdhex=74756c6b6b69|salthex=a0a1a2a3a4a5a6a7a8a9aaabacadaeaf
+V7|pwd=a\0b|salt=S1(32B)
+V7|pwdlen=3|saltlen=32|rc=0|hash=e42755cb4556eddab3d02e25161ec9dcc6d4b9b3dd752ee9c43d20328c5e61bd|enc=$argon2id$v=19$m=65536,t=3,p=4$AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8$5CdVy0VW7dqz0C4lFh7J3MbUubPddS7pxD0gMoxeYb0|pwdhex=610062|salthex=000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
+N1|pwd=8B|salt=S5[0..7]|expect=ARGON2_SALT_TOO_SHORT
+N1|pwdlen=8|saltlen=7|rc=-6|hash=untouched|enc=(n/a)|pwdhex=73616c6173616e61|salthex=31323334353637

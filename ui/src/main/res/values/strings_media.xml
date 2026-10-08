@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The media screens' own strings.
+
+  `res/values/strings.xml` is frozen while the XML-layout sweep runs, so a converted screen that
+  needs copy of its own puts it here. The name is the family the file serves; a new one is a sibling
+  in `res/values/`, not a section of the frozen file.
+-->
+<resources>
+    <!--
+      The long-press item on a media grid row whose original file this process may delete. It was a
+      hardcoded "Delete File" literal in the old adapter's context-menu callback; the text is
+      unchanged.
+    -->
+    <string name="delete_file">Delete File</string>
+</resources>

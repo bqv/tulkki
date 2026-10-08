@@ -1,0 +1,18 @@
+package uk.xa0.tulkki.xmpp.models.mam
+
+import uk.xa0.tulkki.annotation.XmlElement
+import uk.xa0.tulkki.xml.Namespace
+import uk.xa0.tulkki.xmpp.models.Extension
+
+/**
+ * XEP-0313 message archive management, the `<query/>` element that asks for an archive page. The
+ * package namespace moves onto the class, because Kotlin cannot annotate a package; the (`query`,
+ * `urn:xmpp:mam:2`) pair comes from the `@XmlElement` annotation.
+ */
+@XmlElement(namespace = Namespace.MESSAGE_ARCHIVE_MANAGEMENT)
+class Query : Extension(Query::class.java) {
+
+    fun setQueryId(id: String) {
+        setAttribute("queryid", id)
+    }
+}

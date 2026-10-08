@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The conversation list family's own resources: the one `values` file this conversion adds.
+
+  The string is the Compose bar's drawer handle. The deleted MaterialDrawer resolved the library's
+  own `material_drawer_open` for that affordance, and no string in this tree carried it; naming the
+  leading `IconButton` is what gives a screen reader something to say.
+-->
+<resources>
+    <string name="conversation_list_open_drawer">Open navigation drawer</string>
+</resources>
