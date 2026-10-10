@@ -1049,6 +1049,8 @@
     <string name="pref_show_own_accounts_summary">Shows the used account on messages overview and details</string>
     <string name="pref_set_text_collapsable_summary">Collapses text longer than 10 lines</string>
     <string name="pref_set_text_collapsable">Collapse long text</string>
+    <string name="pref_show_formatting_marks">Show formatting marks</string>
+    <string name="pref_show_formatting_marks_summary">Draw *bold* and _italic_ with their markers visible, styled, instead of hiding them.</string>
     <string name="show_less">... show less</string>
     <string name="show_more">... show more</string>
     <string name="pref_show_show_nav_drawer_summary">Activate a navigation drawer to better sort chats</string>

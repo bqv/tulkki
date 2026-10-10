@@ -160,6 +160,8 @@ import uk.xa0.tulkki.ui.projection.UiTransferState
  * @param avatar the host's avatar port, or `null` while a screen has none - which is [AvatarPlacement.GONE]
  * @param avatarsOn the owner's `show_avatars`: off means no reserved column either
  * @param colorful the owner's `use_green_background`, the tree's `colorfulChatBubbles`
+ * @param formattingMarks the owner's `show_formatting_marks`: off draws a completed run as its content,
+ *     on keeps the markers and dims them beside it
  * @param locale the locale the timestamp is written in
  * @param zone the zone the timestamp is written in
  */
@@ -174,6 +176,7 @@ fun ConversationScreen(
     avatar: ConversationAvatar? = null,
     avatarsOn: Boolean = false,
     colorful: Boolean = true,
+    formattingMarks: Boolean = false,
     locale: Locale = Locale.getDefault(),
     zone: ZoneId = ZoneId.systemDefault(),
 ) {
@@ -213,6 +216,7 @@ fun ConversationScreen(
                 avatar = avatar,
                 avatarsOn = avatarsOn,
                 colorful = colorful,
+                formattingMarks = formattingMarks,
                 locale = locale,
                 zone = zone,
             )
@@ -258,6 +262,7 @@ fun ConversationMessages(
     avatar: ConversationAvatar? = null,
     avatarsOn: Boolean = false,
     colorful: Boolean = true,
+    formattingMarks: Boolean = false,
     locale: Locale = Locale.getDefault(),
     zone: ZoneId = ZoneId.systemDefault(),
     scrollTo: MessageId? = null,
@@ -285,6 +290,7 @@ fun ConversationMessages(
                     avatar = avatar,
                     avatarsOn = avatarsOn,
                     colorful = colorful,
+                    formattingMarks = formattingMarks,
                     locale = locale,
                     zone = zone,
                     // The owner's deliberate tap is the only way in: the projector decided which words
@@ -481,6 +487,7 @@ private fun MessageList(
     avatar: ConversationAvatar?,
     avatarsOn: Boolean,
     colorful: Boolean,
+    formattingMarks: Boolean,
     locale: Locale,
     zone: ZoneId,
     onGloss: (UiGlossWord, String, Rect) -> Unit,
@@ -568,6 +575,7 @@ private fun MessageList(
                                 row = item.message,
                                 run = BubbleRun.of(item.message.run, avatarsOn = avatarsOn),
                                 tone = BubbleTone.of(item.message.direction, item.message.encryption, colorful),
+                                formattingMarks = formattingMarks,
                                 unreadCount = item.unreadCount,
                                 events = events,
                                 now = now,
@@ -909,6 +917,7 @@ private fun MessageRow(
     row: UiMessage,
     run: BubbleRun,
     tone: BubbleTone,
+    formattingMarks: Boolean,
     unreadCount: Int?,
     events: ConversationEvents,
     now: Long,
@@ -999,6 +1008,7 @@ private fun MessageRow(
                 MessageBubble(
                     row = row,
                     tone = tone,
+                    formattingMarks = formattingMarks,
                     unreadCount = unreadCount,
                     events = events,
                     now = now,
@@ -1105,6 +1115,7 @@ private fun chatAvatarShape(avatar: ConversationAvatar?): Shape =
 private fun MessageBubble(
     row: UiMessage,
     tone: BubbleTone,
+    formattingMarks: Boolean,
     unreadCount: Int?,
     events: ConversationEvents,
     now: Long,
@@ -1178,13 +1189,13 @@ private fun MessageBubble(
                     )
         ) {
             row.quote?.let { quote ->
-                QuoteStrip(quote, foreground, events, linePx, textPx, lineDp, bodyStyle)
+                QuoteStrip(quote, foreground, events, linePx, textPx, lineDp, bodyStyle, formattingMarks = formattingMarks)
             }
             // §3.6's attachment cell. A transfer row's `top` is `Absent` (its body is an address or a
             // path, never prose), so without this the row is a timestamp and nothing else - the defect
             // this cell answers. It sits where the body would, because for this row it *is* the body.
             row.attachment?.let { attachment -> AttachmentCell(attachment, foreground) }
-            BodyHalf(row.top, foreground, bodyStyle, textPx, linePx, lineDp, onTranslate = { events.onBodyTap(row.id.uuid) }, gloss = row.gloss, onGloss = onGloss)
+            BodyHalf(row.top, foreground, bodyStyle, textPx, linePx, lineDp, formattingMarks = formattingMarks, onTranslate = { events.onBodyTap(row.id.uuid) }, gloss = row.gloss, onGloss = onGloss)
             val bottom = row.bottom
             if (bottom != null) {
                 if (row.divider) {
@@ -1193,10 +1204,10 @@ private fun MessageBubble(
                         modifier = Modifier.padding(vertical = TulkkiSpacing.xs),
                     )
                 }
-                BodyHalf(bottom, foreground, bodyStyle, textPx, linePx, lineDp, onTranslate = { events.onBodyTap(row.id.uuid) })
+                BodyHalf(bottom, foreground, bodyStyle, textPx, linePx, lineDp, formattingMarks = formattingMarks, onTranslate = { events.onBodyTap(row.id.uuid) })
             }
-            OfferedOriginal(row, foreground, bodyStyle, textPx, linePx, lineDp, events)
-            EnglishRow(row, foreground, bodyStyle, textPx, linePx, lineDp, events)
+            OfferedOriginal(row, foreground, bodyStyle, textPx, linePx, lineDp, events, formattingMarks = formattingMarks)
+            EnglishRow(row, foreground, bodyStyle, textPx, linePx, lineDp, events, formattingMarks = formattingMarks)
             Text(
                 text = ConversationRowTime.of(row.time, now, relative = false, words = words, locale = locale, zone = zone),
                 style = MaterialTheme.typography.labelSmall,
@@ -1423,6 +1434,7 @@ private fun BodyHalf(
     textPx: Float,
     linePx: Float,
     lineDp: Dp,
+    formattingMarks: Boolean,
     onTranslate: () -> Unit,
     onReveal: (() -> Unit)? = null,
     gloss: List<UiGlossWord> = emptyList(),
@@ -1441,10 +1453,13 @@ private fun BodyHalf(
                     onGloss = onGloss,
                 )
             } else {
-                // The drawn half carries the body's markup: `*bold*` is bold `bold`, and a body with
-                // no completed run comes back character for character. Nothing is read here but the
-                // text the projector already called the drawn one.
-                Text(text = StyledText.of(body.text), style = style, color = foreground)
+                // The drawn half carries the body's markup, in the mode the owner chose. With the
+                // markers on, `*bold*` is drawn whole - the two `*` dimmed to the foreground's
+                // `makeKeywordOpaque` accent, the `bold` between them bold; off, the markers are
+                // consumed and only `bold` is drawn. Nothing is read here but the text the projector
+                // already called the drawn one, and the switch is read only for a `Visible` body: a
+                // concealed half never reaches this call.
+                Text(text = StyledText.of(body.text, formattingMarks, foreground), style = style, color = foreground)
             }
         is UiBody.Concealed ->
             when (val concealment = body.concealment) {
@@ -1498,7 +1513,8 @@ private fun BodyHalf(
 
 /**
  * A reply's quote: the referenced row's translation, with the referenced original as concealed as
- * the message it sits under - `ReplyQuote` already decided which, so nothing here consults a setting.
+ * the message it sits under - `ReplyQuote` already decided which, so which half is readable is never
+ * re-decided here; only the body's drawing switches travel in with the halves.
  */
 @Composable
 private fun QuoteStrip(
@@ -1509,6 +1525,7 @@ private fun QuoteStrip(
     textPx: Float,
     lineDp: Dp,
     style: TextStyle,
+    formattingMarks: Boolean,
 ) {
     Row(modifier = Modifier.height(IntrinsicSize.Min).padding(bottom = TulkkiSpacing.xs)) {
         Box(
@@ -1524,7 +1541,7 @@ private fun QuoteStrip(
         // translation would be a different purchase.
         val translate: () -> Unit = quote.messageId?.let { id -> { events.onBodyTap(id.uuid) } } ?: {}
         Column(modifier = Modifier.fillMaxWidth()) {
-            BodyHalf(quote.top, foreground, style, textPx, linePx, lineDp, onTranslate = translate)
+            BodyHalf(quote.top, foreground, style, textPx, linePx, lineDp, formattingMarks = formattingMarks, onTranslate = translate)
             val bottom = quote.bottom
             if (bottom != null) {
                 if (quote.divider) {
@@ -1533,7 +1550,7 @@ private fun QuoteStrip(
                         modifier = Modifier.padding(vertical = TulkkiSpacing.xs),
                     )
                 }
-                BodyHalf(bottom, foreground, style, textPx, linePx, lineDp, onTranslate = translate)
+                BodyHalf(bottom, foreground, style, textPx, linePx, lineDp, formattingMarks = formattingMarks, onTranslate = translate)
             }
         }
     }
@@ -1556,6 +1573,7 @@ private fun OfferedOriginal(
     linePx: Float,
     lineDp: Dp,
     events: ConversationEvents,
+    formattingMarks: Boolean,
 ) {
     when (val original = row.original) {
         UiOriginalRow.Absent -> Unit
@@ -1568,6 +1586,7 @@ private fun OfferedOriginal(
                     textPx = textPx,
                     linePx = linePx,
                     lineDp = lineDp,
+                    formattingMarks = formattingMarks,
                     onTranslate = { events.onBodyTap(row.id.uuid) },
                     onReveal = { events.onRevealOriginal(row.id.uuid) },
                 )
@@ -1603,6 +1622,7 @@ private fun EnglishRow(
     linePx: Float,
     lineDp: Dp,
     events: ConversationEvents,
+    formattingMarks: Boolean,
 ) {
     when (val english = row.english) {
         UiEnglishRow.Absent -> Unit
@@ -1628,6 +1648,7 @@ private fun EnglishRow(
                     textPx = textPx,
                     linePx = linePx,
                     lineDp = lineDp,
+                    formattingMarks = formattingMarks,
                     onTranslate = { events.onEnglishTap(row.id.uuid) },
                 )
             }

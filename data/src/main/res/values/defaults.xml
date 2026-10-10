@@ -13,6 +13,7 @@
     <bool name="send_crash_reports">false</bool>
     <bool name="show_avatars">false</bool>
     <bool name="show_connection_options">false</bool>
+    <bool name="show_formatting_marks">false</bool>
     <bool name="show_link_previews">true</bool>
     <bool name="trust_system_ca_store">true</bool>
     <bool name="use_green_background">false</bool>

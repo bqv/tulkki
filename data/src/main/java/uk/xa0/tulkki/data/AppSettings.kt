@@ -136,6 +136,13 @@ class AppSettings(private val context: Context) : AppSettingsRef {
 
     fun isShowAvatars(): Boolean = getBooleanPreference(SHOW_AVATARS, R.bool.show_avatars)
 
+    /**
+     * The owner's "Show formatting marks": on, a drawn body keeps its `*bold*` markers and dims them,
+     * instead of drawing `bold` alone.
+     */
+    fun isShowFormattingMarks(): Boolean =
+        getBooleanPreference(SHOW_FORMATTING_MARKS, R.bool.show_formatting_marks)
+
     fun isCallIntegration(): Boolean = getBooleanPreference(CALL_INTEGRATION, R.bool.call_integration)
 
     fun isAlignStart(): Boolean = getBooleanPreference(ALIGN_START, R.bool.align_start)
@@ -462,6 +469,7 @@ class AppSettings(private val context: Context) : AppSettingsRef {
         const val LARGE_FONT = "large_font"
         const val SHOW_LINK_PREVIEWS = "show_link_previews"
         const val SHOW_AVATARS = "show_avatars"
+        const val SHOW_FORMATTING_MARKS = "show_formatting_marks"
         const val CALL_INTEGRATION = "call_integration"
         const val ALIGN_START = "align_start"
         const val BACKUP_LOCATION = "backup_location"
