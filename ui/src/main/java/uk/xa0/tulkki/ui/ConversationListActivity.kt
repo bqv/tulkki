@@ -137,6 +137,14 @@ import uk.xa0.tulkki.xml.Namespace
  * other fragment read is null-tolerant until then. [onBackendConnected] and [openConversation]
  * therefore park their work if it arrives early.
  *
+ * **And the deferred callback is deferred a second time when the moment is wrong.** The pane's
+ * callback is a `post` on its own view, so it can run after the activity has been paused and its
+ * state saved - a launch that is backgrounded straight away does exactly that - and
+ * `FragmentTransaction.commit` throws when it does. [attachPanes] therefore enqueues the panes'
+ * first transaction only while the activity is resumed, and parks the whole body otherwise;
+ * [onResume] replays it. Nothing is lost and the list is still populated, on the next frame the
+ * owner could have seen.
+ *
  * The Java's unguarded dereferences of the `:data` model's nullable members are kept as
  * `?: throw NullPointerException()` (the convention `ui43g` set for `ConferenceDetailsActivity`),
  * so a call site that threw in Java still throws here rather than silently changing behaviour.
@@ -190,6 +198,15 @@ class ConversationListActivity :
 
     /** Whether the composition's panes exist; nothing commits a transaction into them before they do. */
     private var panesReady = false
+
+    /**
+     * Whether the composition has created the two containers. It is told apart from [panesReady]
+     * because the containers' existence and the first transaction's legality are two facts: the
+     * callback that reports the first can arrive while the activity is paused, and the transaction
+     * then has to wait for [onResume]. Every other fragment read keys on [panesReady], so a
+     * conversation that arrives in that window still parks rather than committing early.
+     */
+    private var panesComposed = false
 
     /** A conversation that arrived before the panes did, replayed by [attachPanes]. */
     private var postponedConversation: Pair<Conversation, Bundle?>? = null
@@ -593,9 +610,27 @@ class ConversationListActivity :
      * `detach`/`attach` pair re-runs the state machine with the container now present, which is the
      * only public way to ask for that; it costs the restored scroll position, which the fragment
      * saves for a rotation and not for this.
+     *
+     * <p>**And the transaction waits for a legal moment.** This callback is a `post` on the pane's
+     * own view, so a launch that is backgrounded straight away runs it after `onPause` and after
+     * `onSaveInstanceState`, when `commit` throws
+     * `IllegalStateException: Can not perform this action after onSaveInstanceState`. The whole body
+     * therefore runs only while this activity is resumed - `mActivityPaused` is true from `onPause`
+     * until `onResume`, and the framework's own saved-state flag is clear only inside that window -
+     * and [onResume] replays it. `panesReady` stays false until then, so every early arrival is
+     * still parked and nothing is lost: the containers exist, and the list is populated on the next
+     * resume. The `isFinishing` half is the one case where no resume follows; the screen is being
+     * torn down, so there is nothing left to populate.
      */
     private fun attachPanes() {
         if (panesReady) {
+            return
+        }
+        // The containers exist from this call on, whatever the moment is: this is the composition's
+        // own callback and it fires once per pane view.
+        panesComposed = true
+        // Not a legal moment to commit; see the note above. `onResume` replays this body.
+        if (isFinishing || mActivityPaused) {
             return
         }
         panesReady = true
@@ -1614,6 +1649,12 @@ class ConversationListActivity :
     override fun onResume() {
         super.onResume()
         mActivityPaused = false
+        // A pane callback that arrived while this activity was paused could not enqueue the panes'
+        // first transaction; this is the next moment at which enqueueing one is legal, and it is
+        // where `attachPanes` parked the work.
+        if (panesComposed && !panesReady) {
+            attachPanes()
+        }
     }
 
     private fun initializeFragments() {
