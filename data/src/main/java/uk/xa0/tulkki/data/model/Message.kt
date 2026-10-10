@@ -794,8 +794,11 @@ open class Message protected constructor(
         if (html != null) return html
         html = Element("html", "http://jabber.org/protocol/xhtml-im")
         val htmlBody = html.addChild("body", "http://www.w3.org/1999/xhtml")
-        // 3.7 pair 2: the markup writer is `:ui`'s, reached through the port `:data` declares.
-        XhtmlBody.append(htmlBody, SpannableStringBuilder(getBody(true)))
+        // 3.7 pair 2: the markup writer is `:ui`'s, reached through the port `:data` declares. The
+        // body is asked for its markup rather than wrapped as plain text: the parser that reads
+        // `*bold*` is `:ui`'s, and a body reaches this model as text (the Compose composer's draft
+        // is a `String` with markers in it), so the one parse happens behind the port.
+        XhtmlBody.append(htmlBody, XhtmlBody.markup(getBody(true)))
         addPayload(html)
         return htmlBody
     }
@@ -804,12 +807,18 @@ open class Message protected constructor(
     fun setBody(span: Spanned?) {
         // Don't bother removing, we'll edit below
         setBodyPreserveXHTML(span?.toString())
-        if (span == null || XhtmlBody.isPlainText(span)) {
+        // The plain body keeps its markers byte for byte - `getBody(true)` is that same text - and
+        // only the XHTML alternate drops them, wrapped in `<strong>`/`<em>`. A body with no markup
+        // writes no alternate at all, which is the tree's wire shape for an ordinary message. The
+        // styling used to arrive in the composer's `Editable`; the Compose field hands over plain
+        // text, so the model asks for the parse instead of trusting the caller to have done it.
+        val markup = if (span == null) null else XhtmlBody.markup(span)
+        if (markup == null || XhtmlBody.isPlainText(markup)) {
             getHtml(true)?.let { payloads.remove(it) }
         } else {
             val htmlBody = getOrMakeHtml()
             htmlBody.clearChildren()
-            XhtmlBody.append(htmlBody, span)
+            XhtmlBody.append(htmlBody, markup)
         }
     }
 
@@ -828,11 +837,32 @@ open class Message protected constructor(
         getHtml(true)?.let { payloads.remove(it) }
     }
 
+    /**
+     * The last write to an outgoing body: [body] is the text that goes on the wire and may carry the
+     * same markup the composer writes, so the alternate is built from it rather than dropped.
+     *
+     * The `String` overload above deliberately clears a stale alternate, and the translation layer
+     * owns the final write to a translated message while holding its answer as a `String`
+     * (`OutgoingTranslation.swap`) - so reaching for that overload there threw away the markup the
+     * composer's body had carried. This routes the same text through the `Spanned` leg with
+     * `XhtmlBody`'s own reading of it. The plain body is [body] byte for byte, a body with no markup
+     * writes no alternate, and an already-styled body is untouched: this is `setBody(Spanned)`'s own
+     * rule, not a second one.
+     */
+    @Synchronized
+    fun setBodyKeepingMarkup(body: String?) {
+        setBody(if (body == null) null else XhtmlBody.markup(body))
+    }
+
     @Synchronized
     fun appendBody(append: Spanned) {
-        if (!XhtmlBody.isPlainText(append) || getHtml() != null) {
+        // A quote is the case this path is reached with: its own text is a `Spanned` that may carry
+        // markup, and it is asked for the same parse as `setBody(Spanned)`. The text appended is the
+        // original either way, so the plain body is unmoved.
+        val markup = XhtmlBody.markup(append)
+        if (!XhtmlBody.isPlainText(markup) || getHtml() != null) {
             val htmlBody = getOrMakeHtml()
-            XhtmlBody.append(htmlBody, append)
+            XhtmlBody.append(htmlBody, markup)
         }
         appendBody(append.toString())
     }

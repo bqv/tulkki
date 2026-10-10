@@ -1415,7 +1415,12 @@ class OutgoingTranslation private constructor() {
                 wire: String?,
                 target: String?
         ) {
-            message.setBody(composed.recompose(wire))
+            // The final write to an outgoing body, and the answer is text: the body may carry the
+            // markup the composer wrote, so it is set through the body's markup-aware setter. The
+            // plain `setBody(String)` clears a stale alternate - which is right for a received body
+            // and wrong here, where it is the styling the composer carried that is being cleared.
+            // Nothing in this module reads the syntax; the body's own type does.
+            message.setBodyKeepingMarkup(composed.recompose(wire))
             message.setTranslatedBody(draft)
             message.setTranslationLang(target)
             message.setTranslationState(Message.TRANSLATION_DONE)
