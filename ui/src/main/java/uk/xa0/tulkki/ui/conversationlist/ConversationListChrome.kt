@@ -472,6 +472,7 @@ private fun ConversationDrawerContent(
                 badge = profile.badge,
                 onClick = { onAccount(profile.id, profile.selected) },
                 avatar = profile.avatar,
+                iconRes = profile.icon,
                 showAvatar = true,
             )
         }
@@ -560,7 +561,11 @@ private fun ActiveAccountHeader(profile: DrawerProfile, onAvatar: () -> Unit) {
     }
 }
 
-/** One account's avatar, drawn through a `Canvas` because the service hands a `Drawable` over. */
+/**
+ * One profile's own image in its circular slot, drawn through a `Canvas` because the service hands a
+ * `Drawable` over: a real account's avatar, or the `tulkki_logo` the "All accounts" pseudo-profile
+ * carries. A `null` image is the plate the tree's `AvatarView` drew while an avatar loads.
+ */
 @Composable
 private fun ProfileAvatar(avatar: Drawable?, size: Int = 40) {
     Box(modifier = Modifier.size(size.dp).clip(CircleShape)) {
@@ -585,16 +590,34 @@ private fun DrawerItemIcon(@DrawableRes icon: Int) {
 }
 
 /**
+ * One setting profile's icon (`Manage accounts`, `Add account`, `Manage Phone Accounts`), the
+ * deleted `ProfileSettingDrawerItem`'s `iconRes`. It is drawn at the same 24 dp that item used, but
+ * centred in the 40 dp slot a profile's avatar occupies, so the setting rows' labels stay aligned
+ * with the account rows' - which is what the deleted `material_drawer_item_profile_setting.xml`
+ * did with its 52 dp icon column.
+ */
+@Composable
+private fun DrawerSettingIcon(@DrawableRes icon: Int) {
+    Box(modifier = Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+        DrawerItemIcon(icon)
+    }
+}
+
+/**
  * One drawer row: the label, an optional description, an optional leading slot and an optional
  * count badge, with a tap and a long press. The selected background is the one visual the deleted
  * MaterialDrawer item carried that the content needs - which row is the current filter.
  *
- * <p>The leading slot is one of three plain values rather than a composable lambda, so a row cannot
- * carry a composition of its own: an entry's theme icon, a profile's avatar, or nothing.
+ * <p>The leading slot is one of four plain values rather than a composable lambda, so a row cannot
+ * carry a composition of its own: a profile's avatar, a profile's own icon, an entry's theme icon,
+ * or nothing. A profile is checked before an entry because [showAvatar] owns the 40 dp slot the
+ * account rows indented their labels by, and an entry's icon is the 24 dp one.
  *
- * @param iconRes the entry's own icon, the deleted `PrimaryDrawerItem`'s `iconRes`.
- * @param avatar the profile's own image, the deleted `ProfileDrawerItem`'s `iconBitmap`; a `null`
- *     avatar with [showAvatar] draws the plate the tree's `AvatarView` drew.
+ * @param iconRes the entry's own icon, the deleted `PrimaryDrawerItem`'s `iconRes`, or a setting
+ *     profile's, the deleted `ProfileSettingDrawerItem`'s.
+ * @param avatar the profile's own image, the deleted `ProfileDrawerItem`'s `iconBitmap`/`iconRes`;
+ *     a `null` avatar with [showAvatar] and no [iconRes] draws the plate the tree's `AvatarView`
+ *     drew while a real account's avatar loads.
  * @param showAvatar whether this row is a profile and therefore has an avatar slot at all.
  */
 @Composable
@@ -625,13 +648,19 @@ private fun DrawerRow(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (iconRes != null) {
+        if (showAvatar) {
+            // The profile slot: the account's avatar, a setting profile's own icon at its own
+            // 24 dp inside the same 40 dp column, or the loading plate.
+            when {
+                avatar != null -> ProfileAvatar(avatar)
+                iconRes != null -> DrawerSettingIcon(iconRes)
+                else -> ProfileAvatar(null)
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+        } else if (iconRes != null) {
             Box(modifier = Modifier.size(24.dp), contentAlignment = Alignment.Center) {
                 DrawerItemIcon(iconRes)
             }
-            Spacer(modifier = Modifier.width(12.dp))
-        } else if (showAvatar) {
-            ProfileAvatar(avatar)
             Spacer(modifier = Modifier.width(12.dp))
         }
         Column(modifier = Modifier.weight(1f)) {
@@ -804,10 +833,16 @@ enum class ConversationLeading {
 /**
  * One profile in the drawer's account block, the deleted `AccountHeaderView`'s rows.
  *
+ * @param avatar the profile's own image in the circular 40 dp slot: a real account's avatar, or the
+ *     `tulkki_logo` the "All accounts" pseudo-profile carried as `ProfileDrawerItem.iconRes`. The
+ *     header draws the selected profile's avatar, so the pseudo-profile's logo shows there too.
  * @param badge the account's unread count, `0` for none. The deleted header drew a blank badge for
  *     a zero count to keep the row's height; a Compose badge with no count draws nothing, which is
  *     the same height because the row's own padding carries it.
  * @param selected whether this is the active profile.
+ * @param icon the 24 dp icon a setting profile carries where an account has an avatar - the deleted
+ *     `ProfileSettingDrawerItem`'s `iconRes`. `null` for every account and for the pseudo-profile,
+ *     whose logo is [avatar].
  */
 data class DrawerProfile(
     val id: Long,
@@ -816,6 +851,7 @@ data class DrawerProfile(
     val avatar: Drawable?,
     val badge: Int,
     val selected: Boolean,
+    @DrawableRes val icon: Int? = null,
 )
 
 /**
