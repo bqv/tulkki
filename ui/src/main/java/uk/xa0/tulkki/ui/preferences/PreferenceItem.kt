@@ -1,5 +1,7 @@
 package uk.xa0.tulkki.ui.preferences
 
+import androidx.annotation.DrawableRes
+
 /**
  * One row of a settings screen that used to be `res/xml/preferences_*.xml`, as a value.
  *
@@ -53,7 +55,7 @@ data class PreferenceItem(
     val key: String? = null,
     val title: CharSequence? = null,
     val summary: CharSequence? = null,
-    val icon: Int? = null,
+    @DrawableRes val icon: Int? = null,
     val kind: Kind = Kind.PLAIN,
     val checked: Boolean = false,
     val labels: List<CharSequence> = emptyList(),

@@ -1,5 +1,11 @@
 package uk.xa0.tulkki.ui.preferences
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.VectorDrawable
+import androidx.annotation.DrawableRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -30,6 +36,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -202,11 +214,49 @@ private fun PreferenceValue(
 @Composable
 private fun PreferenceIcon(item: PreferenceItem) {
     val icon = item.icon ?: return
+    val painter = iconPainter(icon) ?: return
     Image(
-        painter = painterResource(icon),
+        painter = painter,
         contentDescription = null,
         modifier = Modifier.size(TulkkiSpacing.xl),
     )
+}
+
+/**
+ * The painter for one `android:icon`, whatever kind of drawable the resource is - and never a crash.
+ *
+ * <p>`painterResource` accepts only a vector or a raster: it hands every other XML resource to the
+ * vector loader, which throws `IllegalArgumentException("Only VectorDrawables and rasterized asset
+ * types are supported ex. PNG, JPG, WEBP")` and kills the composing screen. An `android:icon` was
+ * never bound by that rule - the old XML row drew a `<shape>`, a `<layer-list>` or a selector as
+ * happily as a vector - so a row the old screen rendered fine (`active_indicator`, a `<shape>`;
+ * `thread_hint`, a `<layer-list>`) crashed the settings screen the moment it composed. The icon
+ * path therefore resolves the drawable itself: a vector keeps the vector path, because it is
+ * resolution-independent and rasterising it would trade that away; every other drawable is drawn
+ * into a bitmap at the size the row gives it. A resource that does not resolve draws nothing, which
+ * is a missing icon and not a dead screen.
+ */
+@Composable
+private fun iconPainter(@DrawableRes icon: Int): Painter? {
+    val context = LocalContext.current
+    val drawable = remember(context, icon) { AppCompatResources.getDrawable(context, icon) } ?: return null
+    if (drawable is VectorDrawable) {
+        return painterResource(icon)
+    }
+    val size = with(LocalDensity.current) { TulkkiSpacing.xl.roundToPx() }
+    return remember(drawable, size) { BitmapPainter(drawable.rasterize(size, size)) }
+}
+
+/**
+ * One drawable drawn into a bitmap of exactly [width] x [height] pixels, which is what makes the
+ * path total: a `<shape>` with no `<size>` has no intrinsic size, and `Drawable.toBitmap()` throws
+ * on one - the same crash in a new place. Explicit bounds have no such gap.
+ */
+private fun Drawable.rasterize(width: Int, height: Int): ImageBitmap {
+    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    setBounds(0, 0, width, height)
+    draw(Canvas(bitmap))
+    return bitmap.asImageBitmap()
 }
 
 /** The row's second field, or nothing at all - a row with no summary draws no second line. */
