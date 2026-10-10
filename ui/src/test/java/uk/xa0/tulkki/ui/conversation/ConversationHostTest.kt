@@ -921,8 +921,11 @@ class ConversationHostTest {
             "the shipped appearance is the resources' own default, which is not the screen's",
             defaults.contains("<bool name=\"show_avatars\">false</bool>") &&
                 defaults.contains("<bool name=\"use_green_background\">false</bool>") &&
+                defaults.contains("<bool name=\"show_formatting_marks\">false</bool>") &&
                 read("ui/src/main/java/uk/xa0/tulkki/ui/conversation/ChatAppearance.kt")
-                    .contains("ChatAppearance(avatarsOn = false, colorful = false)"),
+                    .contains(
+                        "ChatAppearance(avatarsOn = false, colorful = false, formattingMarks = false)",
+                    ),
         )
     }
 
