@@ -837,6 +837,23 @@ open class Message protected constructor(
         getHtml(true)?.let { payloads.remove(it) }
     }
 
+    /**
+     * The last write to an outgoing body: [body] is the text that goes on the wire and may carry the
+     * same markup the composer writes, so the alternate is built from it rather than dropped.
+     *
+     * The `String` overload above deliberately clears a stale alternate, and the translation layer
+     * owns the final write to a translated message while holding its answer as a `String`
+     * (`OutgoingTranslation.swap`) - so reaching for that overload there threw away the markup the
+     * composer's body had carried. This routes the same text through the `Spanned` leg with
+     * `XhtmlBody`'s own reading of it. The plain body is [body] byte for byte, a body with no markup
+     * writes no alternate, and an already-styled body is untouched: this is `setBody(Spanned)`'s own
+     * rule, not a second one.
+     */
+    @Synchronized
+    fun setBodyKeepingMarkup(body: String?) {
+        setBody(if (body == null) null else XhtmlBody.markup(body))
+    }
+
     @Synchronized
     fun appendBody(append: Spanned) {
         // A quote is the case this path is reached with: its own text is a `Spanned` that may carry
