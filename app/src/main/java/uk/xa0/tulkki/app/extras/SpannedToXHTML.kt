@@ -62,6 +62,13 @@ import uk.xa0.tulkki.xml.TextNode
  */
 object SpannedToXHTML : XhtmlBody.Writer {
 
+    /**
+     * The colour the parser's keyword spans are built with when no surface will draw them. They are
+     * `XHTML_REMOVE`-flagged in that branch, so [append] skips them and this value is never written;
+     * it is named so the zero reads as a decision rather than an omission.
+     */
+    private const val MARKER_COLOUR_REMOVED = 0
+
     private fun cleanSpans(text: Spanned): SpannableStringBuilder {
         val newText = SpannableStringBuilder(text)
         val spans = newText.getSpans(0, newText.length, ParcelableSpan::class.java)
@@ -79,6 +86,28 @@ object SpannedToXHTML : XhtmlBody.Writer {
         val cleanText = cleanSpans(text)
         val style = cleanText.getSpans(0, cleanText.length, CharacterStyle::class.java)
         return style.size < 1
+    }
+
+    /**
+     * The plain body's markup, as the spans [append] writes.
+     *
+     * The one parse is `StylingHelper.format`'s, over a fresh `SpannableStringBuilder` - which is an
+     * `Editable`, so the composer's own decorator's signature takes it unchanged. `composing = true`
+     * is load-bearing and not about composition: it is the only branch that marks the keyword runs
+     * `XHTML_REMOVE`, so [append] drops the marker glyphs from the markup (which is what the body's
+     * plain-text alternate does not do) instead of writing a colour span for each of them. The
+     * colour handed in never reaches the wire for the same reason, which is why it is a named zero
+     * rather than a theme's.
+     *
+     * A body that already carries styling is returned untouched: the guard is [isPlainText], so a
+     * caller that decorated its own `Editable` is not styled a second time.
+     */
+    override fun markup(body: CharSequence): Spanned {
+        val spannable = SpannableStringBuilder(body)
+        if (isPlainText(spannable)) {
+            StylingHelper.format(spannable, 0, spannable.length - 1, MARKER_COLOUR_REMOVED, true)
+        }
+        return spannable
     }
 
     override fun append(out: Element, text: Spanned): Element {

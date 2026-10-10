@@ -25,10 +25,16 @@ import uk.xa0.tulkki.xml.Element
  * It is expressible without respelling an edge (round 151's rule for ports, applied to a non-island
  * module): every type in these signatures - `Spanned`, `Element` - is the wire layer's or the JDK's,
  * never `:app`'s or `:ui`'s.
+ *
+ * **It reads as well as writes.** [Writer.markup] answers the model's plain body with the spans the
+ * syntax carries, because the parser is `:ui`'s and the body that reaches `Message` is text with
+ * markers in it (`getOrMakeHtml`'s own call site). The writer answers from the one parser it already
+ * shares with `StylingHelper.createSpanForStyle`, so the drawn body and the sent body cannot read
+ * the syntax differently.
  */
 object XhtmlBody {
 
-    /** What `:ui` can do for the model: write markup, and say whether it is needed. */
+    /** What `:ui` can do for the model: write markup, say whether it is needed, and read it. */
     interface Writer {
 
         /** Append `text`'s styling to `out`, and return it. */
@@ -36,6 +42,18 @@ object XhtmlBody {
 
         /** Whether `text` carries no styling at all, so no markup has to be written. */
         fun isPlainText(text: Spanned): Boolean
+
+        /**
+         * The markup a plain body carries, as spans `append` can write: `*bold*`, `_italic_`,
+         * `~strike~` and the two code forms.
+         *
+         * `:data` holds the body as text and cannot read the syntax itself - `ImStyleParser` is
+         * `:ui`'s - so a body that arrived as plain text (the Compose composer's draft is a `String`
+         * with markers in it) asks here, and `SpannedToXHTML` answers with the one parse it shares
+         * with `StylingHelper.createSpanForStyle`. A body that already carries styling is returned
+         * as it is, so a caller that decorated it first is not styled twice.
+         */
+        fun markup(body: CharSequence): Spanned
     }
 
     @Volatile
@@ -54,6 +72,10 @@ object XhtmlBody {
     /** @throws IllegalStateException when nothing was installed - a build fault, not a runtime state */
     @JvmStatic
     fun isPlainText(text: Spanned): Boolean = require().isPlainText(text)
+
+    /** The plain body's markup, read by the writer that shares the parser with the row. See [Writer.markup]. */
+    @JvmStatic
+    fun markup(body: CharSequence): Spanned = require().markup(body)
 
     private fun require(): Writer {
         val writer = installed
