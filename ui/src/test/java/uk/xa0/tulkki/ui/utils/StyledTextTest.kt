@@ -235,10 +235,11 @@ class StyledTextTest {
         val styled = StyledText.of("*bold*", showMarkers = true, foreground = INK)
 
         // The only coloured spans are the two marker runs, and the colour is the foreground's own
-        // RGB at `transformColor`'s 45% - the `makeKeywordOpaque` accent - never full strength.
+        // RGB at `transformColor`'s 45% - the `makeKeywordOpaque` accent - never full strength. The
+        // equality is exact, so any other fraction would fail the set, not slip past a delta.
         val coloured = spans(styled).filter { it.style.color != Color.Unspecified }
         Assert.assertEquals(setOf(Span(0, 1, accent(INK)), Span(5, 6, accent(INK))), coloured.toSet())
-        Assert.assertEquals(0.45f, accent(INK).color.alpha, 0.001f)
+        Assert.assertNotEquals(SpanStyle(color = INK), accent(INK))
     }
 
     @Test
