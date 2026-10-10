@@ -4558,6 +4558,7 @@ private fun refreshTulkkiMessages() {
     this.tulkkiPageInputs.settings = projection
     this.tulkkiPageInputs.avatarsOn = appearance.avatarsOn
     this.tulkkiPageInputs.colorful = appearance.colorful
+    this.tulkkiPageInputs.formattingMarks = appearance.formattingMarks
     this.tulkkiPageInputs.locale = Locale.getDefault()
     this.tulkkiPageInputs.zone = ZoneId.systemDefault()
     this.tulkkiMessagesSession.watch(

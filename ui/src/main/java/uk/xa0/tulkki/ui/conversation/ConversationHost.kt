@@ -699,6 +699,9 @@ object ConversationHost {
         /** The owner's `use_green_background`, the tree's `colorfulChatBubbles`. */
         internal var colorful: Boolean = true
 
+        /** The owner's `show_formatting_marks`: off means a drawn body's markers are consumed. */
+        internal var formattingMarks: Boolean = false
+
         /** The locale the rows' labels are written in. */
         internal var locale: Locale = Locale.getDefault()
 
@@ -832,6 +835,7 @@ object ConversationHost {
                         modifier = Modifier.fillMaxSize(),
                         avatarsOn = inputs.avatarsOn,
                         colorful = inputs.colorful,
+                        formattingMarks = inputs.formattingMarks,
                         locale = inputs.locale,
                         zone = inputs.zone,
                         scrollTo = messages.scrollTo,

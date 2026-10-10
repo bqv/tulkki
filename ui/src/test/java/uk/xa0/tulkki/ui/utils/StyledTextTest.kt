@@ -1,5 +1,6 @@
 package uk.xa0.tulkki.ui.utils
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -23,6 +24,11 @@ import org.junit.Test
  *
  * <p>Offsets are pinned where the marker removal could drift: a run after another run, and a nested
  * pair, both have to land on their content once the markers between them are gone.
+ *
+ * <p>**The kept-marker mode is one parse with the other assembly, and the cells below pin both halves
+ * of its look**: the string still carries the glyphs, each marker run takes `StylingHelper`'s own
+ * accent - the foreground at 45% - and the content between them keeps the emphasis unchanged. The
+ * literal cells are repeated here so the mode cannot style a marker the parser never recognised.
  */
 class StyledTextTest {
 
@@ -141,9 +147,133 @@ class StyledTextTest {
         Assert.assertEquals("", StyledText.of("").text)
     }
 
+    @Test
+    fun boldKeepsItsMarkersAndStillBoldsTheContent() {
+        val styled = StyledText.of("*bold*", showMarkers = true, foreground = INK)
+
+        Assert.assertEquals("*bold*", styled.text)
+        Assert.assertEquals(
+            setOf(
+                Span(0, 1, accent(INK)),
+                Span(1, 5, SpanStyle(fontWeight = FontWeight.Bold)),
+                Span(5, 6, accent(INK)),
+            ),
+            spans(styled).toSet(),
+        )
+    }
+
+    @Test
+    fun emphasisKeepsItsMarkersAndStillSlantsTheContent() {
+        val styled = StyledText.of("_emphasis_", showMarkers = true, foreground = INK)
+
+        Assert.assertEquals("_emphasis_", styled.text)
+        Assert.assertEquals(
+            setOf(
+                Span(0, 1, accent(INK)),
+                Span(1, 9, SpanStyle(fontStyle = FontStyle.Italic)),
+                Span(9, 10, accent(INK)),
+            ),
+            spans(styled).toSet(),
+        )
+    }
+
+    @Test
+    fun aFencedBlockKeepsItsWholeFenceLineAndStillMakesTheContentMonospace() {
+        val styled = StyledText.of("```\ncode\n```", showMarkers = true, foreground = INK)
+
+        // The opening marker is the whole fence line, newline and all, exactly what
+        // `StylingHelper.format` handed `makeKeywordOpaque`; the closing fence is its own run.
+        Assert.assertEquals("```\ncode\n```", styled.text)
+        Assert.assertEquals(
+            setOf(
+                Span(0, 4, accent(INK)),
+                Span(4, 9, SpanStyle(fontFamily = FontFamily.Monospace)),
+                Span(9, 12, accent(INK)),
+            ),
+            spans(styled).toSet(),
+        )
+    }
+
+    @Test
+    fun aNestedPairKeepsBothMarkerPairsAndBothEmphases() {
+        val styled = StyledText.of("*_both_*", showMarkers = true, foreground = INK)
+
+        Assert.assertEquals("*_both_*", styled.text)
+        Assert.assertEquals(
+            setOf(
+                Span(0, 1, accent(INK)),
+                Span(1, 2, accent(INK)),
+                Span(1, 7, SpanStyle(fontWeight = FontWeight.Bold)),
+                Span(2, 6, SpanStyle(fontStyle = FontStyle.Italic)),
+                Span(6, 7, accent(INK)),
+                Span(7, 8, accent(INK)),
+            ),
+            spans(styled).toSet(),
+        )
+    }
+
+    @Test
+    fun aRunAfterAnotherRunKeepsItsOwnOffsetsWithTheMarkersInPlace() {
+        val styled = StyledText.of("hi *you* and _me_", showMarkers = true, foreground = INK)
+
+        Assert.assertEquals("hi *you* and _me_", styled.text)
+        Assert.assertEquals(
+            setOf(
+                Span(3, 4, accent(INK)),
+                Span(4, 7, SpanStyle(fontWeight = FontWeight.Bold)),
+                Span(7, 8, accent(INK)),
+                Span(13, 14, accent(INK)),
+                Span(14, 16, SpanStyle(fontStyle = FontStyle.Italic)),
+                Span(16, 17, accent(INK)),
+            ),
+            spans(styled).toSet(),
+        )
+    }
+
+    @Test
+    fun theMarkerGlyphsTakeTheTextColourAtFortyFivePercent() {
+        val styled = StyledText.of("*bold*", showMarkers = true, foreground = INK)
+
+        // The only coloured spans are the two marker runs, and the colour is the foreground's own
+        // RGB at `transformColor`'s 45% - the `makeKeywordOpaque` accent - never full strength.
+        val coloured = spans(styled).filter { it.style.color != Color.Unspecified }
+        Assert.assertEquals(setOf(Span(0, 1, accent(INK)), Span(5, 6, accent(INK))), coloured.toSet())
+        Assert.assertEquals(0.45f, accent(INK).color.alpha, 0.001f)
+    }
+
+    @Test
+    fun aMarkerInsideAWordStaysLiteralWhenTheMarkersAreShown() {
+        val styled = StyledText.of("a*b*", showMarkers = true, foreground = INK)
+
+        Assert.assertEquals("a*b*", styled.text)
+        Assert.assertEquals(emptyList<Span>(), spans(styled))
+    }
+
+    @Test
+    fun anUnclosedMarkerStaysLiteralWhenTheMarkersAreShown() {
+        val styled = StyledText.of("*bold", showMarkers = true, foreground = INK)
+
+        Assert.assertEquals("*bold", styled.text)
+        Assert.assertEquals(emptyList<Span>(), spans(styled))
+    }
+
+    @Test
+    fun aBodyWithNoMarkupComesBackWithNoSpansWhenTheMarkersAreShown() {
+        val styled = StyledText.of("Hei! Oletko tulossa huomenna?", showMarkers = true, foreground = INK)
+
+        Assert.assertEquals("Hei! Oletko tulossa huomenna?", styled.text)
+        Assert.assertEquals(emptyList<Span>(), spans(styled))
+    }
+
     /** One emphasis over one range of the drawn text, in the shape a cell can compare. */
     private data class Span(val start: Int, val end: Int, val style: SpanStyle)
 
     private fun spans(styled: AnnotatedString): List<Span> =
         styled.spanStyles.map { Span(it.start, it.end, it.item) }
+
+    /** The colour a body is drawn in, opaque, so the marker accent's 45% is a real change. */
+    private val INK = Color(0xFF112233)
+
+    /** `StylingHelper.transformColor`'s recipe, written out: the text colour at 45% alpha. */
+    private fun accent(ink: Color): SpanStyle = SpanStyle(color = ink.copy(alpha = 0.45f))
 }

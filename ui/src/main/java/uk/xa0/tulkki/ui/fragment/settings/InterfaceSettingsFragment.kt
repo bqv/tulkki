@@ -155,6 +155,7 @@ class InterfaceSettingsFragment : PreferenceScreenFragment() {
         items.add(switch(AppSettings.SHOW_LINK_PREVIEWS, R.string.show_link_previews, R.string.show_link_previews_summary, R.drawable.rounded_link_24, uk.xa0.tulkki.data.R.bool.show_link_previews))
         items.add(switch(PLAIN_TEXT_LINKS, R.string.pref_plain_text_links_title, R.string.pref_plain_text_links_summary, R.drawable.rounded_link_24, R.bool.plain_text_links))
         items.add(switch(SET_TEXT_COLLAPSABLE, R.string.pref_set_text_collapsable, R.string.pref_set_text_collapsable_summary, R.drawable.ic_keyboard_double_arrow_down_24dp, R.bool.set_text_collapsable))
+        items.add(switch(AppSettings.SHOW_FORMATTING_MARKS, R.string.pref_show_formatting_marks, R.string.pref_show_formatting_marks_summary, R.drawable.rounded_format_bold_24, uk.xa0.tulkki.data.R.bool.show_formatting_marks))
 
         items.add(header(R.string.pref_category_operating_system))
         items.add(switch(AppSettings.ALLOW_SCREENSHOTS, R.string.pref_allow_screenshots, R.string.pref_allow_screenshots_summary, R.drawable.ic_screenshot_24dp, uk.xa0.tulkki.data.R.bool.allow_screenshots))

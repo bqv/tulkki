@@ -21,16 +21,23 @@ import uk.xa0.tulkki.data.AppSettings
  *     either, on reserves the run's column and draws the avatar where the run's edge is
  * @param colorful the owner's `use_green_background`, the tree's `colorfulChatBubbles`, which picks the
  *     bubble's tone family
+ * @param formattingMarks the owner's `show_formatting_marks`: off draws a completed run as its content
+ *     (`*bold*` is bold `bold`), on keeps the marker glyphs and draws them dimmed beside that content
  */
-data class ChatAppearance(val avatarsOn: Boolean, val colorful: Boolean) {
+data class ChatAppearance(
+    val avatarsOn: Boolean,
+    val colorful: Boolean,
+    val formattingMarks: Boolean,
+) {
 
     companion object {
 
         /**
-         * The tree's own defaults, for a caller that has not read the owner's settings: both of
+         * The tree's own defaults, for a caller that has not read the owner's settings: all three of
          * `AppSettings`' resources are off - `data/src/main/res/values/defaults.xml` carries
-         * `show_avatars=false` and `use_green_background=false` - so a fresh install reserves no avatar
-         * column and draws the plain `SURFACE` family.
+         * `show_avatars=false`, `use_green_background=false` and `show_formatting_marks=false` - so a
+         * fresh install reserves no avatar column, draws the plain `SURFACE` family and consumes the
+         * markers.
          *
          * <p>**It is not `ConversationScreen`'s own parameter default**, and the difference is the
          * point of this holder: the screen defaults `colorful = true` for a *caller with no settings at
@@ -38,7 +45,7 @@ data class ChatAppearance(val avatarsOn: Boolean, val colorful: Boolean) {
          * conversation has the owner's answer and must pass it. The live host passed nothing, so it drew
          * the colourful family for an owner whose setting was off.
          */
-        val SHIPPED = ChatAppearance(avatarsOn = false, colorful = false)
+        val SHIPPED = ChatAppearance(avatarsOn = false, colorful = false, formattingMarks = false)
 
         /** The owner's answers, read once per show by the host that has the settings. */
         @JvmStatic
@@ -46,6 +53,7 @@ data class ChatAppearance(val avatarsOn: Boolean, val colorful: Boolean) {
             ChatAppearance(
                 avatarsOn = settings.isShowAvatars(),
                 colorful = settings.isColorfulChatBubbles(),
+                formattingMarks = settings.isShowFormattingMarks(),
             )
     }
 }
