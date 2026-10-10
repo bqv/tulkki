@@ -93,6 +93,7 @@ import uk.xa0.tulkki.ui.shimmer
 import uk.xa0.tulkki.ui.theme.LocalTulkkiColors
 import uk.xa0.tulkki.ui.theme.TulkkiShape
 import uk.xa0.tulkki.ui.theme.TulkkiSpacing
+import uk.xa0.tulkki.ui.utils.StyledText
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.offset
@@ -1440,7 +1441,10 @@ private fun BodyHalf(
                     onGloss = onGloss,
                 )
             } else {
-                Text(text = body.text, style = style, color = foreground)
+                // The drawn half carries the body's markup: `*bold*` is bold `bold`, and a body with
+                // no completed run comes back character for character. Nothing is read here but the
+                // text the projector already called the drawn one.
+                Text(text = StyledText.of(body.text), style = style, color = foreground)
             }
         is UiBody.Concealed ->
             when (val concealment = body.concealment) {
