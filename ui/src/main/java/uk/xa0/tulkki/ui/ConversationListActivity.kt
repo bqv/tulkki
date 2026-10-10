@@ -180,6 +180,14 @@ class ConversationListActivity :
         AvatarView(this).apply { scaleType = ImageView.ScaleType.CENTER_CROP }
     }
 
+    /**
+     * The "All accounts" pseudo-profile's image: the deleted `ProfileDrawerItem`'s `iconRes`, which
+     * was `R.drawable.tulkki_logo`. It is resolved once rather than per read, because a fresh
+     * `Drawable` every read would make [ConversationDrawerState] unequal to itself and recompose the
+     * drawer for nothing.
+     */
+    private val allAccountsLogo by lazy { getDrawable(R.drawable.tulkki_logo) }
+
     /** Whether the composition's panes exist; nothing commits a transaction into them before they do. */
     private var panesReady = false
 
@@ -326,7 +334,10 @@ class ConversationListActivity :
                     id = PROFILE_ID_BASE + profiles.size,
                     name = getString(R.string.all_accounts),
                     description = getString(R.string.all_accounts),
-                    avatar = null,
+                    // The deleted `ProfileDrawerItem` carried `R.drawable.tulkki_logo` as its
+                    // `iconRes`, so the logo goes in the profile's circular image slot - not an
+                    // entry icon - and the header draws it too while this pseudo-profile is active.
+                    avatar = allAccountsLogo,
                     badge = 0,
                     selected = selectedAccount == null,
                 ),
@@ -362,6 +373,8 @@ class ConversationListActivity :
                 name = getString(R.string.action_accounts),
                 description = "",
                 avatar = null,
+                // The deleted `ProfileSettingDrawerItem`'s own `iconRes`.
+                icon = R.drawable.ic_settings_24dp,
                 badge = 0,
                 selected = false,
             ),
@@ -372,6 +385,7 @@ class ConversationListActivity :
                 name = getString(R.string.action_add_account),
                 description = "",
                 avatar = null,
+                icon = R.drawable.ic_add_24dp,
                 badge = 0,
                 selected = false,
             ),
@@ -384,6 +398,7 @@ class ConversationListActivity :
                     name = "Manage Phone Accounts",
                     description = "",
                     avatar = null,
+                    icon = R.drawable.ic_call_24dp,
                     badge = 0,
                     selected = false,
                 ),

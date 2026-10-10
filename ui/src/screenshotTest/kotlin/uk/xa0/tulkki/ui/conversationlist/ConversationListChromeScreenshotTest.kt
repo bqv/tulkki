@@ -4,7 +4,9 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.android.tools.screenshot.PreviewTest
 import uk.xa0.tulkki.ui.R
@@ -26,11 +28,13 @@ import uk.xa0.tulkki.ui.theme.TulkkiTheme
  * <p>**What these cannot pin, and why.** The two-pane arrangement: its two panes are the `FrameLayout`
  * containers the fragment manager adds `main_fragment` and `secondary_fragment` into, created by the
  * composition, and a preview has no `FragmentActivity` to add anything to - so a reference of it would
- * be two empty boxes and would pin nothing. The avatars: the account rows' images are a live
- * `AvatarService` `Drawable`, and a cell has no account to resolve one from, so the plate the row
- * draws without one is what a reference shows. And the list's own rows: the screen has its own six
- * cells (`ConversationListScreenScreenshotTest`), and the box under the bar here is a plain
- * placeholder so this file pins the furniture and not a second copy of the rows.
+ * be two empty boxes and would pin nothing. The real accounts' avatars: their images are a live
+ * `AvatarService` `Drawable`, and a cell has no account to resolve one from, so the plate those rows
+ * draw without one is what a reference shows. The "All accounts" pseudo-profile is the exception and
+ * is pinned: its image is the `tulkki_logo` resource, which a cell can resolve exactly as the
+ * activity does. And the list's own rows: the screen has its own six cells
+ * (`ConversationListScreenScreenshotTest`), and the box under the bar here is a plain placeholder so
+ * this file pins the furniture and not a second copy of the rows.
  */
 @PreviewTest
 @Preview(name = "conversation-list-chrome-dark", uiMode = Configuration.UI_MODE_NIGHT_YES, widthDp = 420, heightDp = 720)
@@ -105,20 +109,25 @@ private fun Drawer(darkTheme: Boolean) {
 }
 
 /**
- * The drawer's content as the activity assembles it: the active profile over the other profiles and
- * the two setting rows, then the filters with the same counts the deleted `refreshUiReal` computed,
- * one tag, and the three sticky rows in the order the deleted `addStickyDrawerItems` listed them.
+ * The drawer's content as the activity assembles it: the active "All accounts" pseudo-profile (the
+ * active profile when more than one account exists and none is selected) over a real-account plate
+ * and the two setting rows with their icons, then the filters with the same counts the deleted
+ * `refreshUiReal` computed, one tag, and the three sticky rows in the order the deleted
+ * `addStickyDrawerItems` listed them.
  */
-private fun drawerState(): ConversationDrawerState =
-    ConversationDrawerState(
+@Composable
+private fun drawerState(): ConversationDrawerState {
+    val context = LocalContext.current
+    val logo = remember(context) { context.getDrawable(R.drawable.tulkki_logo) }
+    return ConversationDrawerState(
         profiles =
             listOf(
                 DrawerProfile(
                     id = 100L,
-                    name = "Mikko",
-                    description = "mikko@example.org",
-                    avatar = null,
-                    badge = 2,
+                    name = "All accounts",
+                    description = "All accounts",
+                    avatar = logo,
+                    badge = 0,
                     selected = true,
                 ),
                 DrawerProfile(
@@ -126,7 +135,7 @@ private fun drawerState(): ConversationDrawerState =
                     name = "Sari",
                     description = "sari@example.org",
                     avatar = null,
-                    badge = 0,
+                    badge = 2,
                     selected = false,
                 ),
                 DrawerProfile(
@@ -136,6 +145,7 @@ private fun drawerState(): ConversationDrawerState =
                     avatar = null,
                     badge = 0,
                     selected = false,
+                    icon = R.drawable.ic_settings_24dp,
                 ),
                 DrawerProfile(
                     id = 5L,
@@ -144,6 +154,7 @@ private fun drawerState(): ConversationDrawerState =
                     avatar = null,
                     badge = 0,
                     selected = false,
+                    icon = R.drawable.ic_add_24dp,
                 ),
             ),
         items =
@@ -170,3 +181,4 @@ private fun drawerState(): ConversationDrawerState =
                 DrawerEntry(id = 9L, label = "Settings", icon = R.drawable.ic_settings_24dp),
             ),
     )
+}
